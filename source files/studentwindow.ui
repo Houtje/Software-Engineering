@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>StudentWindow</class>
+ <widget class="QMainWindow" name="StudentWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1280</width>
+    <height>720</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Student Window</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QPushButton" name="compileButton">
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>550</y>
+      <width>141</width>
+      <height>121</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Compile</string>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="achievementList">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>10</y>
+      <width>1201</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="flow">
+     <enum>QListView::LeftToRight</enum>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="ietsButton">
+    <property name="geometry">
+     <rect>
+      <x>560</x>
+      <y>550</y>
+      <width>141</width>
+      <height>121</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Test</string>
+    </property>
+   </widget>
+   <widget class="QTableWidget" name="tableWidget">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>100</y>
+      <width>301</width>
+      <height>331</height>
+     </rect>
+    </property>
+    <property name="selectionMode">
+     <enum>QAbstractItemView::SingleSelection</enum>
+    </property>
+    <property name="selectionBehavior">
+     <enum>QAbstractItemView::SelectRows</enum>
+    </property>
+    <property name="rowCount">
+     <number>0</number>
+    </property>
+    <property name="columnCount">
+     <number>5</number>
+    </property>
+    <attribute name="horizontalHeaderDefaultSectionSize">
+     <number>22</number>
+    </attribute>
+    <attribute name="verticalHeaderVisible">
+     <bool>false</bool>
+    </attribute>
+    <attribute name="verticalHeaderDefaultSectionSize">
+     <number>20</number>
+    </attribute>
+    <column/>
+    <column/>
+    <column/>
+    <column/>
+    <column/>
+   </widget>
+   <widget class="QTextEdit" name="opdrachtText">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>100</y>
+      <width>881</width>
+      <height>121</height>
+     </rect>
+    </property>
+    <property name="placeholderText">
+     <string>Opdracht Tekst</string>
+    </property>
+   </widget>
+   <widget class="QTextEdit" name="opdrachtCode">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>230</y>
+      <width>881</width>
+      <height>201</height>
+     </rect>
+    </property>
+    <property name="placeholderText">
+     <string>C# code</string>
+    </property>
+   </widget>
+   <widget class="QTextEdit" name="opdrachtTerminal">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>440</y>
+      <width>881</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="placeholderText">
+     <string>Terminal</string>
+    </property>
+   </widget>
+   <widget class="QWebView" name="webView">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>440</y>
+      <width>301</width>
+      <height>231</height>
+     </rect>
+    </property>
+    <property name="url">
+     <url>
+      <string>https://www.youtube.com/embed/DLzxrzFCyOs</string>
+     </url>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="submitKnop">
+    <property name="geometry">
+     <rect>
+      <x>1080</x>
+      <y>550</y>
+      <width>141</width>
+      <height>121</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Inleveren</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>QWebView</class>
+   <extends>QWidget</extends>
+   <header>QtWebKitWidgets/QWebView</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
