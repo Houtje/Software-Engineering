@@ -52,7 +52,7 @@ QSqlQuery SqlHandler::selectMW(QString table, QString column1, QString column2 ,
 //One Where Statement
 void SqlHandler::alterOW(QString table ,QString column1 , QString waarde, QString whereState1 ){
     QString str = "UPDATE `"+ table + "SET `(" + column1 + "`) = (`" + waarde +"`) Where" + whereState1 ;
-     alter(str);
+	alter(str);
 }
 
 //Two Where Statements

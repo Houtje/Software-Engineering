@@ -23,14 +23,15 @@ public:
 public slots:
 
 private slots:
-	void on_ietsButton_clicked();
-
 	void on_compileButton_clicked();
-
-	void on_submitKnop_clicked();
+	void on_submitButton_clicked();
+	void on_opslaanButton_clicked();
+	void on_tableWidget_cellDoubleClicked(int row, int column);
 
 private:
 	Ui::StudentWindow *ui;
+	QString opdrachtNummer;
+	int opdrachtMaker;
 };
 
 #endif // STUDENTWINDOW_H

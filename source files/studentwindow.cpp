@@ -1,12 +1,14 @@
 #include "studentwindow.h"
 #include "ui_studentwindow.h"
 #include "sqlhandler.h"
+#include "QDebug"
 
 StudentWindow::StudentWindow(QWidget *parent) :
     QMainWindow(parent),
 	ui(new Ui::StudentWindow)
 {
 	ui->setupUi(this);
+	opdrachtMaker = 2;
 	QHeaderView *headerView = new QHeaderView(Qt::Horizontal, ui->tableWidget);
 	ui->tableWidget->setHorizontalHeader(headerView);
 	headerView->setSectionResizeMode(0, QHeaderView::Stretch);
@@ -44,10 +46,39 @@ StudentWindow::StudentWindow(QWidget *parent) :
 			 * connect( assignmentItem, SIGNAL(mouseDoubleClickEvent()), this, SLOT(on_testButton_clicked()));
 			*/
 		}
+		if(ui->tableWidget->cellWidget(0,0) != NULL) {
+			ui->opslaanButton->setDisabled(false);
+			ui->submitButton->setDisabled(false);
+			QLabel *opdracht = (QLabel*) ui->tableWidget->cellWidget(0, 0);
+			opdrachtNummer = opdracht->text().mid(9, opdracht->text().length()-9);
+			QString x = "SELECT `instructions`, `video` FROM `assignments` WHERE `assID` = ";
+			QString y = "SELECT `solution` FROM `assignment_status` WHERE `assID` = " + opdrachtNummer + " AND `accID` = "+QString::number(opdrachtMaker);
+			SqlHandler *sqlplayer = new SqlHandler();
+			QSqlQuery q = sqlplayer->select(x + opdrachtNummer);
+			q.next();
+			ui->opdrachtText->setText(q.value(0).toString());
+			ui->youtubeView->setUrl(q.value(1).toString());
+
+			QSqlQuery m = sqlplayer->select(y);
+			m.next();
+			ui->opdrachtCode->setText(m.value(0).toString());
+
+		}
+		QString achieve = "SELECT `achID` FROM `achievements` WHERE `accID` = " + QString::number(opdrachtMaker);
+		q = sqlplayer->select(achieve);
+		while(q.next()) {
+			int achievementNumber = q.value(0).toInt();
+			QIcon achievementItem(":/new/prefix1/plaatjes/achievements/" + QString::number(achievementNumber) + ".jpg");
+			QListWidgetItem *newItem = new QListWidgetItem(ui->achievementList);
+			ui->achievementList->setResizeMode(QListView::Adjust);
+			newItem->setIcon(achievementItem);
+			newItem->setSizeHint(achievementItem.actualSize(QSize(100, 50)));
+			ui->achievementList->addItem( newItem);
+		}
 		QStringList headers = QStringList();
 		headers.append(QString("Naam"));
 		headers.append(QString("L"));
-		headers.append(QString("T"));
+		headers.append(QString("W"));
 		headers.append(QString("C"));
 		headers.append(QString("O"));
 		ui->tableWidget->setHorizontalHeaderLabels(headers);
@@ -60,21 +91,43 @@ StudentWindow::~StudentWindow()
 	delete ui;
 }
 
-void StudentWindow::on_ietsButton_clicked()
-{
-	QIcon achievementItem(":/new/prefix1/plaatjes/EYO.jpg");
-	QListWidgetItem *newItem = new QListWidgetItem(ui->achievementList);
-	newItem->setIcon(achievementItem);
-	newItem->setSizeHint(achievementItem.actualSize(QSize(100, 100)));
-	ui->achievementList->addItem( newItem);
-}
-
 void StudentWindow::on_compileButton_clicked()
 {
 
 }
 
-void StudentWindow::on_submitKnop_clicked()
+void StudentWindow::on_submitButton_clicked()
 {
-	ui->opdrachtText->setText("Hallo");
+	SqlHandler *sqlplayer = new SqlHandler();
+	QString alter = "UPDATE `assignment_status` SET `submitted` = 1, `solution` = '" + ui->opdrachtCode->toPlainText() + "' WHERE `assID` = " + opdrachtNummer +" AND `accID` = "+QString::number(opdrachtMaker);
+	qDebug(alter.toStdString().c_str());
+	sqlplayer->alter(alter);
+}
+
+void StudentWindow::on_opslaanButton_clicked()
+{
+
+	SqlHandler *sqlplayer = new SqlHandler();
+	QString alter = "UPDATE `assignment_status` SET `solution` = '" + ui->opdrachtCode->toPlainText() + "' WHERE `assID` = " + opdrachtNummer +" AND `accID` = "+QString::number(opdrachtMaker);
+	qDebug(alter.toStdString().c_str());
+	sqlplayer->alter(alter);
+}
+
+void StudentWindow::on_tableWidget_cellDoubleClicked(int row, int column)
+{
+	ui->opslaanButton->setDisabled(false);
+	ui->submitButton->setDisabled(false);
+	QLabel *opdracht = (QLabel*) ui->tableWidget->cellWidget(row, 0);
+	opdrachtNummer = opdracht->text().mid(9, opdracht->text().length()-9);
+	QString x = "SELECT `instructions`, `video` FROM `assignments` WHERE `assID` = ";
+	QString y = "SELECT `solution` FROM `assignment_status` WHERE `assID` = " + opdrachtNummer + " AND `accID` = "+QString::number(opdrachtMaker);
+	SqlHandler *sqlplayer = new SqlHandler();
+	QSqlQuery q = sqlplayer->select(x + opdrachtNummer);
+	q.next();
+	ui->opdrachtText->setText(q.value(0).toString());
+	ui->youtubeView->setUrl(q.value(1).toString());
+
+	QSqlQuery m = sqlplayer->select(y);
+	m.next();
+	ui->opdrachtCode->setText(m.value(0).toString());
 }

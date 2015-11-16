@@ -1,11 +1,11 @@
 <RCC>
     <qresource prefix="/new/prefix1">
         <file>plaatjes/checkbox_unchecked.png</file>
-        <file>plaatjes/EYO.jpg</file>
         <file>plaatjes/checkbox_checked.png</file>
         <file>plaatjes/checkbox_checked_hover.png</file>
         <file>plaatjes/checkbox_checked_pressed.png</file>
         <file>plaatjes/checkbox_unchecked_hover.png</file>
         <file>plaatjes/checkbox_unchecked_pressed.png</file>
+        <file>plaatjes/achievements/1.jpg</file>
     </qresource>
 </RCC>
