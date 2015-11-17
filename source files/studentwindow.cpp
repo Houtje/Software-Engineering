@@ -3,12 +3,12 @@
 #include "sqlhandler.h"
 #include "QDebug"
 
-StudentWindow::StudentWindow(QWidget *parent) :
+StudentWindow::StudentWindow(int accID, QWidget *parent) :
     QMainWindow(parent),
 	ui(new Ui::StudentWindow)
 {
 	ui->setupUi(this);
-	opdrachtMaker = 2;
+	ingelogde = accID;
 	QHeaderView *headerView = new QHeaderView(Qt::Horizontal, ui->tableWidget);
 	ui->tableWidget->setHorizontalHeader(headerView);
 	headerView->setSectionResizeMode(0, QHeaderView::Stretch);
@@ -29,7 +29,7 @@ StudentWindow::StudentWindow(QWidget *parent) :
 	QWebSettings::globalSettings()->setAttribute(QWebSettings::AutoLoadImages, true);
 	SqlHandler *sqlplayer = new SqlHandler();
 	if(sqlplayer != NULL) {
-		QSqlQuery q = sqlplayer->selectOW("assignment_status", "assID", "score", "`accID` = 2");
+		QSqlQuery q = sqlplayer->selectOW("assignment_status", "assID", "score", "`accID` = " + QString::number(ingelogde));
 		while(q.next()) {
 			ui->tableWidget->insertRow(ui->tableWidget->rowCount());
 			ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 0, new QLabel("Opdracht " + QString::number(q.value(0).toInt())));
@@ -52,7 +52,7 @@ StudentWindow::StudentWindow(QWidget *parent) :
 			QLabel *opdracht = (QLabel*) ui->tableWidget->cellWidget(0, 0);
 			opdrachtNummer = opdracht->text().mid(9, opdracht->text().length()-9);
 			QString x = "SELECT `instructions`, `video` FROM `assignments` WHERE `assID` = ";
-			QString y = "SELECT `solution` FROM `assignment_status` WHERE `assID` = " + opdrachtNummer + " AND `accID` = "+QString::number(opdrachtMaker);
+			QString y = "SELECT `solution` FROM `assignment_status` WHERE `assID` = " + opdrachtNummer + " AND `accID` = "+QString::number(ingelogde);
 			SqlHandler *sqlplayer = new SqlHandler();
 			QSqlQuery q = sqlplayer->select(x + opdrachtNummer);
 			q.next();
@@ -64,7 +64,7 @@ StudentWindow::StudentWindow(QWidget *parent) :
 			ui->opdrachtCode->setText(m.value(0).toString());
 
 		}
-		QString achieve = "SELECT `achID` FROM `achievements` WHERE `accID` = " + QString::number(opdrachtMaker);
+		QString achieve = "SELECT `achID` FROM `achievements` WHERE `accID` = " + QString::number(ingelogde);
 		q = sqlplayer->select(achieve);
 		while(q.next()) {
 			int achievementNumber = q.value(0).toInt();
@@ -99,7 +99,7 @@ void StudentWindow::on_compileButton_clicked()
 void StudentWindow::on_submitButton_clicked()
 {
 	SqlHandler *sqlplayer = new SqlHandler();
-	QString alter = "UPDATE `assignment_status` SET `submitted` = 1, `solution` = '" + ui->opdrachtCode->toPlainText() + "' WHERE `assID` = " + opdrachtNummer +" AND `accID` = "+QString::number(opdrachtMaker);
+	QString alter = "UPDATE `assignment_status` SET `submitted` = 1, `solution` = '" + ui->opdrachtCode->toPlainText() + "' WHERE `assID` = " + opdrachtNummer +" AND `accID` = "+QString::number(ingelogde);
 	qDebug(alter.toStdString().c_str());
 	sqlplayer->alter(alter);
 }
@@ -108,7 +108,7 @@ void StudentWindow::on_opslaanButton_clicked()
 {
 
 	SqlHandler *sqlplayer = new SqlHandler();
-	QString alter = "UPDATE `assignment_status` SET `solution` = '" + ui->opdrachtCode->toPlainText() + "' WHERE `assID` = " + opdrachtNummer +" AND `accID` = "+QString::number(opdrachtMaker);
+	QString alter = "UPDATE `assignment_status` SET `solution` = '" + ui->opdrachtCode->toPlainText() + "' WHERE `assID` = " + opdrachtNummer +" AND `accID` = "+QString::number(ingelogde);
 	qDebug(alter.toStdString().c_str());
 	sqlplayer->alter(alter);
 }
@@ -120,7 +120,7 @@ void StudentWindow::on_tableWidget_cellDoubleClicked(int row, int column)
 	QLabel *opdracht = (QLabel*) ui->tableWidget->cellWidget(row, 0);
 	opdrachtNummer = opdracht->text().mid(9, opdracht->text().length()-9);
 	QString x = "SELECT `instructions`, `video` FROM `assignments` WHERE `assID` = ";
-	QString y = "SELECT `solution` FROM `assignment_status` WHERE `assID` = " + opdrachtNummer + " AND `accID` = "+QString::number(opdrachtMaker);
+	QString y = "SELECT `solution` FROM `assignment_status` WHERE `assID` = " + opdrachtNummer + " AND `accID` = "+QString::number(ingelogde);
 	SqlHandler *sqlplayer = new SqlHandler();
 	QSqlQuery q = sqlplayer->select(x + opdrachtNummer);
 	q.next();

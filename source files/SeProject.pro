@@ -15,15 +15,21 @@ TEMPLATE = app
 SOURCES += main.cpp \
     studentwindow.cpp \
     qrocheckbox.cpp \
-    sqlhandler.cpp
+    sqlhandler.cpp \
+    logindialog.cpp \
+    docentwindow.cpp
 
 HEADERS  += \
     studentwindow.h \
     qrocheckbox.h \
-    sqlhandler.h
+    sqlhandler.h \
+    logindialog.h \
+    docentwindow.h
 
 FORMS    += \
-    studentwindow.ui
+    studentwindow.ui \
+    logindialog.ui \
+    docentwindow.ui
 
 RESOURCES += \
     achievements.qrc
