@@ -17,19 +17,22 @@ SOURCES += main.cpp \
     qrocheckbox.cpp \
     sqlhandler.cpp \
     logindialog.cpp \
-    docentwindow.cpp
+    docentwindow.cpp \
+    createwindow.cpp
 
 HEADERS  += \
     studentwindow.h \
     qrocheckbox.h \
     sqlhandler.h \
     logindialog.h \
-    docentwindow.h
+    docentwindow.h \
+    createwindow.h
 
 FORMS    += \
     studentwindow.ui \
     logindialog.ui \
-    docentwindow.ui
+    docentwindow.ui \
+    createwindow.ui
 
 RESOURCES += \
     achievements.qrc

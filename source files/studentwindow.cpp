@@ -54,9 +54,9 @@ StudentWindow::StudentWindow(int accID, QWidget *parent) :
 			QString x = "SELECT `instructions`, `video` FROM `assignments` WHERE `assID` = ";
 			QString y = "SELECT `solution` FROM `assignment_status` WHERE `assID` = " + opdrachtNummer + " AND `accID` = "+QString::number(ingelogde);
 			SqlHandler *sqlplayer = new SqlHandler();
-			QSqlQuery q = sqlplayer->select(x + opdrachtNummer);
+            QSqlQuery q = sqlplayer->select(x + opdrachtNummer);
 			q.next();
-			ui->opdrachtText->setText(q.value(0).toString());
+            ui->opdrachtText->setText(q.value(0).toString());
 			ui->youtubeView->setUrl(q.value(1).toString());
 
 			QSqlQuery m = sqlplayer->select(y);

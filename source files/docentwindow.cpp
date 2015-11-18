@@ -1,6 +1,7 @@
 #include "docentwindow.h"
 #include "ui_DocentWindow.h"
 #include "sqlhandler.h"
+#include "createwindow.h"
 
 DocentWindow::DocentWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -37,7 +38,8 @@ DocentWindow::~DocentWindow()
 
 void DocentWindow::on_opdrachtBeheerButton_clicked()
 {
-
+    CreateWindow* w = new CreateWindow();
+    w->show();
 }
 
 void DocentWindow::on_compileButton_clicked()
