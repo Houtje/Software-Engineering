@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/new/prefix1">
+        <file>plaatjes/bronze_cup.png</file>
+        <file>plaatjes/golden_cup.png</file>
+        <file>plaatjes/silver_cup.png</file>
+    </qresource>
+</RCC>
