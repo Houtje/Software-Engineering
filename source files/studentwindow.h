@@ -19,6 +19,7 @@ class StudentWindow : public QMainWindow
 public:
 	explicit StudentWindow(int accID, QWidget *parent = 0);
 	~StudentWindow();
+	bool keepGoing();
 
 public slots:
 
@@ -28,10 +29,13 @@ private slots:
 	void on_opslaanButton_clicked();
 	void on_tableWidget_cellDoubleClicked(int row, int column);
 
+	void on_logOutButton_clicked();
+
 private:
 	Ui::StudentWindow *ui;
 	QString opdrachtNummer;
 	int ingelogde;
+	bool goLogin;
 };
 
 #endif // STUDENTWINDOW_H

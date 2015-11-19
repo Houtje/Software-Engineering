@@ -15,7 +15,7 @@ LogInDialog::~LogInDialog()
 }
 
 
-void LogInDialog::on_LogInButton_clicked()
+void LogInDialog::on_logInButton_clicked()
 {
 	QString name = ui->NameTextBox->text();
 	QString pass = ui->PassTextBox->text();

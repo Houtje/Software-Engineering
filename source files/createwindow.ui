@@ -451,6 +451,9 @@
       <height>251</height>
      </rect>
     </property>
+    <property name="tabStopWidth">
+     <number>20</number>
+    </property>
     <property name="placeholderText">
      <string>Skeletcode</string>
     </property>

@@ -18,7 +18,7 @@ public:
 	void getValues(int & accID, bool & doc);
 
 private slots:
-	void on_LogInButton_clicked();
+	void on_logInButton_clicked();
 
 private:
 	Ui::LogInDialog *ui;

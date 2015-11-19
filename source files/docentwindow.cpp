@@ -1,5 +1,5 @@
 #include "docentwindow.h"
-#include "ui_DocentWindow.h"
+#include "ui_docentwindow.h"
 #include "sqlhandler.h"
 #include "createwindow.h"
 
@@ -28,6 +28,7 @@ DocentWindow::DocentWindow(QWidget *parent) :
 		headers.append(QString("Opdracht - Naam Student"));
 		ui->tableWidget->setHorizontalHeaderLabels(headers);
 		ui->tableWidget->horizontalHeader()->setVisible(true);
+		ui->tableWidget->horizontalHeaderItem(0)->setTextAlignment(Qt::AlignLeft);
 	}
 }
 
@@ -93,4 +94,17 @@ void DocentWindow::on_tableWidget_cellDoubleClicked(int row, int column)
 	QSqlQuery m = sqlplayer->select(y);
 	m.next();
 	ui->opdrachtCode->setText(m.value(0).toString());
+}
+
+void DocentWindow::on_logOutButton_clicked()
+{
+	goLogin = true;
+	this->close();
+}
+
+
+bool DocentWindow::keepGoing() {
+	bool tempLogin = goLogin;
+	goLogin = false;
+	return tempLogin;
 }

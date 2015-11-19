@@ -79,9 +79,9 @@
      <colorrole role="BrightText">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>255</red>
-        <green>255</green>
-        <blue>255</blue>
+        <red>0</red>
+        <green>0</green>
+        <blue>0</blue>
        </color>
       </brush>
      </colorrole>
@@ -97,8 +97,8 @@
      <colorrole role="Base">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>93</red>
-        <green>177</green>
+        <red>255</red>
+        <green>255</green>
         <blue>255</blue>
        </color>
       </brush>
@@ -125,8 +125,8 @@
       <brush brushstyle="SolidPattern">
        <color alpha="255">
         <red>0</red>
-        <green>255</green>
-        <blue>255</blue>
+        <green>0</green>
+        <blue>0</blue>
        </color>
       </brush>
      </colorrole>
@@ -142,9 +142,18 @@
      <colorrole role="AlternateBase">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>193</red>
-        <green>144</green>
+        <red>55</red>
+        <green>162</green>
         <blue>243</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="NoRole">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>43</red>
+        <green>152</green>
+        <blue>198</blue>
        </color>
       </brush>
      </colorrole>
@@ -152,8 +161,8 @@
       <brush brushstyle="SolidPattern">
        <color alpha="255">
         <red>255</red>
-        <green>255</green>
-        <blue>220</blue>
+        <green>0</green>
+        <blue>196</blue>
        </color>
       </brush>
      </colorrole>
@@ -234,9 +243,9 @@
      <colorrole role="BrightText">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>255</red>
-        <green>255</green>
-        <blue>255</blue>
+        <red>0</red>
+        <green>0</green>
+        <blue>0</blue>
        </color>
       </brush>
      </colorrole>
@@ -252,8 +261,8 @@
      <colorrole role="Base">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>93</red>
-        <green>177</green>
+        <red>255</red>
+        <green>255</green>
         <blue>255</blue>
        </color>
       </brush>
@@ -280,8 +289,8 @@
       <brush brushstyle="SolidPattern">
        <color alpha="255">
         <red>0</red>
-        <green>255</green>
-        <blue>255</blue>
+        <green>0</green>
+        <blue>0</blue>
        </color>
       </brush>
      </colorrole>
@@ -297,9 +306,18 @@
      <colorrole role="AlternateBase">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>193</red>
-        <green>144</green>
+        <red>55</red>
+        <green>162</green>
         <blue>243</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="NoRole">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>43</red>
+        <green>152</green>
+        <blue>198</blue>
        </color>
       </brush>
      </colorrole>
@@ -307,8 +325,8 @@
       <brush brushstyle="SolidPattern">
        <color alpha="255">
         <red>255</red>
-        <green>255</green>
-        <blue>220</blue>
+        <green>0</green>
+        <blue>196</blue>
        </color>
       </brush>
      </colorrole>
@@ -389,9 +407,9 @@
      <colorrole role="BrightText">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>255</red>
-        <green>255</green>
-        <blue>255</blue>
+        <red>0</red>
+        <green>0</green>
+        <blue>0</blue>
        </color>
       </brush>
      </colorrole>
@@ -452,9 +470,18 @@
      <colorrole role="AlternateBase">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
-        <red>132</red>
-        <green>33</green>
-        <blue>231</blue>
+        <red>55</red>
+        <green>162</green>
+        <blue>243</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="NoRole">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>43</red>
+        <green>152</green>
+        <blue>198</blue>
        </color>
       </brush>
      </colorrole>
@@ -462,8 +489,8 @@
       <brush brushstyle="SolidPattern">
        <color alpha="255">
         <red>255</red>
-        <green>255</green>
-        <blue>220</blue>
+        <green>0</green>
+        <blue>196</blue>
        </color>
       </brush>
      </colorrole>
@@ -486,15 +513,16 @@
    <widget class="QPushButton" name="accountBeheerButton">
     <property name="geometry">
      <rect>
-      <x>480</x>
-      <y>580</y>
-      <width>141</width>
-      <height>91</height>
+      <x>360</x>
+      <y>620</y>
+      <width>111</width>
+      <height>51</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>16</pointsize>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
      </font>
     </property>
     <property name="text">
@@ -505,15 +533,16 @@
    <widget class="QPushButton" name="opdrachtBeheerButton">
     <property name="geometry">
      <rect>
-      <x>880</x>
-      <y>580</y>
-      <width>141</width>
-      <height>91</height>
+      <x>490</x>
+      <y>620</y>
+      <width>111</width>
+      <height>51</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>16</pointsize>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
      </font>
     </property>
     <property name="text">
@@ -529,6 +558,48 @@
       <width>301</width>
       <height>651</height>
      </rect>
+    </property>
+    <property name="palette">
+     <palette>
+      <active>
+       <colorrole role="Highlight">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>0</red>
+          <green>255</green>
+          <blue>255</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </active>
+      <inactive>
+       <colorrole role="Highlight">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>0</red>
+          <green>255</green>
+          <blue>255</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </inactive>
+      <disabled>
+       <colorrole role="Highlight">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>51</red>
+          <green>153</green>
+          <blue>255</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </disabled>
+     </palette>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+     </font>
     </property>
     <property name="verticalScrollBarPolicy">
      <enum>Qt::ScrollBarAsNeeded</enum>
@@ -610,9 +681,9 @@
     <property name="geometry">
      <rect>
       <x>360</x>
-      <y>150</y>
+      <y>160</y>
       <width>881</width>
-      <height>201</height>
+      <height>221</height>
      </rect>
     </property>
     <property name="palette">
@@ -660,7 +731,7 @@
     <property name="geometry">
      <rect>
       <x>360</x>
-      <y>400</y>
+      <y>450</y>
       <width>881</width>
       <height>101</height>
      </rect>
@@ -766,15 +837,16 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>1090</x>
-      <y>520</y>
-      <width>141</width>
-      <height>51</height>
+      <x>1130</x>
+      <y>570</y>
+      <width>111</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>16</pointsize>
+      <family>Arial</family>
+      <pointsize>14</pointsize>
      </font>
     </property>
     <property name="text">
@@ -784,10 +856,10 @@
    <widget class="QWidget" name="horizontalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>390</x>
-      <y>520</y>
-      <width>671</width>
-      <height>51</height>
+      <x>360</x>
+      <y>570</y>
+      <width>701</width>
+      <height>31</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -830,19 +902,39 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>1100</x>
-      <y>360</y>
-      <width>141</width>
+      <x>1130</x>
+      <y>400</y>
+      <width>111</width>
       <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>16</pointsize>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
      </font>
     </property>
     <property name="text">
      <string>Compile</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="logOutButton">
+    <property name="geometry">
+     <rect>
+      <x>1130</x>
+      <y>640</y>
+      <width>111</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Uitloggen</string>
     </property>
    </widget>
   </widget>

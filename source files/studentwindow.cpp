@@ -8,6 +8,7 @@ StudentWindow::StudentWindow(int accID, QWidget *parent) :
 	ui(new Ui::StudentWindow)
 {
 	ui->setupUi(this);
+	goLogin = false;
 	ingelogde = accID;
 	QHeaderView *headerView = new QHeaderView(Qt::Horizontal, ui->tableWidget);
 	ui->tableWidget->setHorizontalHeader(headerView);
@@ -28,6 +29,14 @@ StudentWindow::StudentWindow(int accID, QWidget *parent) :
 	QWebSettings::globalSettings()->setAttribute(QWebSettings::PluginsEnabled, true);
 	QWebSettings::globalSettings()->setAttribute(QWebSettings::AutoLoadImages, true);
 	SqlHandler *sqlplayer = new SqlHandler();
+	QString username = "SELECT `username` FROM `accounts` WHERE `accID` = " + QString::number(accID);
+	qDebug(username.toStdString().c_str());
+	QSqlQuery n = sqlplayer->select(username);
+	if(n.next()) {
+		ui->nameLabel->setText(n.value(0).toString().toStdString().c_str());
+	} else {
+		ui->nameLabel->setText("Database ERROR");
+	}
 	if(sqlplayer != NULL) {
 		QSqlQuery q = sqlplayer->selectOW("assignment_status", "assID", "score", "`accID` = " + QString::number(ingelogde));
 		while(q.next()) {
@@ -51,12 +60,12 @@ StudentWindow::StudentWindow(int accID, QWidget *parent) :
 			ui->submitButton->setDisabled(false);
 			QLabel *opdracht = (QLabel*) ui->tableWidget->cellWidget(0, 0);
 			opdrachtNummer = opdracht->text().mid(9, opdracht->text().length()-9);
-			QString x = "SELECT `instructions`, `video` FROM `assignments` WHERE `assID` = ";
+			QString x = "SELECT `instructions`, `video` FROM `assignments` WHERE `assID` = " + opdrachtNummer;
 			QString y = "SELECT `solution` FROM `assignment_status` WHERE `assID` = " + opdrachtNummer + " AND `accID` = "+QString::number(ingelogde);
 			SqlHandler *sqlplayer = new SqlHandler();
-            QSqlQuery q = sqlplayer->select(x + opdrachtNummer);
+			QSqlQuery q = sqlplayer->select(x);
 			q.next();
-            ui->opdrachtText->setText(q.value(0).toString());
+			ui->opdrachtText->setText(q.value(0).toString());
 			ui->youtubeView->setUrl(q.value(1).toString());
 
 			QSqlQuery m = sqlplayer->select(y);
@@ -82,6 +91,7 @@ StudentWindow::StudentWindow(int accID, QWidget *parent) :
 		headers.append(QString("C"));
 		headers.append(QString("O"));
 		ui->tableWidget->setHorizontalHeaderLabels(headers);
+		ui->tableWidget->horizontalHeaderItem(0)->setTextAlignment(Qt::AlignLeft);
 		ui->tableWidget->horizontalHeader()->setVisible(true);
 	}
 }
@@ -130,4 +140,16 @@ void StudentWindow::on_tableWidget_cellDoubleClicked(int row, int column)
 	QSqlQuery m = sqlplayer->select(y);
 	m.next();
 	ui->opdrachtCode->setText(m.value(0).toString());
+}
+
+void StudentWindow::on_logOutButton_clicked()
+{
+	goLogin = true;
+	this->close();
+}
+
+bool StudentWindow::keepGoing() {
+	bool tempLogin = goLogin;
+	goLogin = false;
+	return tempLogin;
 }
