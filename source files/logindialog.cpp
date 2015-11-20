@@ -27,6 +27,8 @@ void LogInDialog::on_logInButton_clicked()
 	if(q.next()) {
 		accountID = q.value(0).toInt();
 		docent = q.value(1).toInt();
+		ui->NameTextBox->setText("");
+		ui->PassTextBox->setText("");
 		QDialog::accept();
 	} else {
 		ui->ErrorLabel->setText("Gebruikersnaam/wachtwoord combinatie bestaat niet");
@@ -36,4 +38,10 @@ void LogInDialog::on_logInButton_clicked()
 void LogInDialog::getValues(int & accID, bool & doc) {
 	accID = accountID;
 	doc = docent;
+}
+
+void LogInDialog::on_registerButton_clicked()
+{
+	RegisterWindows *rw = new RegisterWindows();
+	rw->exec();
 }

@@ -22,6 +22,7 @@ public:
 	bool keepGoing();
 
 public slots:
+	void refresh();
 
 private slots:
 	void on_opdrachtBeheerButton_clicked();
@@ -33,7 +34,7 @@ private slots:
 
 private:
 	Ui::DocentWindow *ui;
-	QString opdrachtNummer;
+	QString opdrachtNaam;
 	QString opdrachtMaker;
 	int opdrachtRij;
 	bool goLogin;

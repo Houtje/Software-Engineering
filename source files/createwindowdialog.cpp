@@ -1,12 +1,12 @@
-#include "createwindow.h"
+#include "createwindowdialog.h"
+#include "ui_createwindowdialog.h"
 #include "sqlhandler.h"
-#include "ui_createwindow.h"
 
-CreateWindow::CreateWindow(int assignment, QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::CreateWindow)
+CreateWindowDialog::CreateWindowDialog(int assignment, QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::CreateWindowDialog)
 {
-    ui->setupUi(this);
+	ui->setupUi(this);
 	assID = assignment;
 	if(assID) {
 		SqlHandler *sqlplayer = new SqlHandler();
@@ -24,14 +24,14 @@ CreateWindow::CreateWindow(int assignment, QWidget *parent) :
 
 }
 
-CreateWindow::~CreateWindow()
+CreateWindowDialog::~CreateWindowDialog()
 {
-    delete ui;
+	delete ui;
 }
 
-void CreateWindow::on_createknop_clicked()
+void CreateWindowDialog::on_createknop_clicked()
 {
-    SqlHandler *sqlplayer = new SqlHandler();
+	SqlHandler *sqlplayer = new SqlHandler();
 	if(assID) {
 		QString alter = "UPDATE `assignments` SET `naam` = '" + ui->opdrachtnaam->toPlainText() + "', `instructions` = '" + ui->beschrijving->toPlainText() + "', `video` = '" + ui->ytlink->toPlainText() + "', `skeletcode` = '" + ui->skeletcode->toPlainText() + "' WHERE `assID` = " + QString::number(assID);
 		qDebug(alter.toStdString().c_str());
@@ -49,11 +49,11 @@ void CreateWindow::on_createknop_clicked()
 		sqlplayer->alter(alter);
 
 	}
-    this->close();
+	this->close();
 }
 
-void CreateWindow::on_cancelknop_clicked()
+void CreateWindowDialog::on_cancelknop_clicked()
 {
-    this->close();
+	this->close();
 }
 

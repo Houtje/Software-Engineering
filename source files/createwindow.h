@@ -12,7 +12,7 @@ class CreateWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit CreateWindow(QWidget *parent = 0);
+	explicit CreateWindow(int assignment, QWidget *parent = 0);
     ~CreateWindow();
 
 private slots:
@@ -21,6 +21,7 @@ private slots:
 
 private:
     Ui::CreateWindow *ui;
+	int assID;
 };
 
 #endif // CREATEWINDOW_H

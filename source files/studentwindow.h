@@ -5,8 +5,9 @@
 #include <QWebView>
 #include <QtNetwork>
 #include <QNetworkProxyFactory>
-#include "qrocheckbox.h"
 #include <QLabel>
+#include <QMessageBox>
+#include "qrocheckbox.h"
 
 namespace Ui {
 class StudentWindow;
@@ -22,18 +23,19 @@ public:
 	bool keepGoing();
 
 public slots:
+	void refresh();
 
 private slots:
 	void on_compileButton_clicked();
 	void on_submitButton_clicked();
 	void on_opslaanButton_clicked();
 	void on_tableWidget_cellDoubleClicked(int row, int column);
-
 	void on_logOutButton_clicked();
+	void on_resetButton_clicked();
 
 private:
 	Ui::StudentWindow *ui;
-	QString opdrachtNummer;
+	QString opdrachtNaam;
 	int ingelogde;
 	bool goLogin;
 };

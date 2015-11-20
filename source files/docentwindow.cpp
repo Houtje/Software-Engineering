@@ -1,14 +1,14 @@
 #include "docentwindow.h"
+#include "docentassignmentswindow.h"
 #include "ui_docentwindow.h"
 #include "sqlhandler.h"
-#include "createwindow.h"
 
 DocentWindow::DocentWindow(QWidget *parent) :
     QMainWindow(parent),
 	ui(new Ui::DocentWindow)
 {
 	ui->setupUi(this);
-
+	goLogin = false;
 	QHeaderView *headerView = new QHeaderView(Qt::Horizontal, ui->tableWidget);
 	ui->tableWidget->setHorizontalHeader(headerView);
 	headerView->setSectionResizeMode(0, QHeaderView::Stretch);
@@ -17,19 +17,10 @@ DocentWindow::DocentWindow(QWidget *parent) :
 	QNetworkProxyFactory::setUseSystemConfiguration(true);
 	QWebSettings::globalSettings()->setAttribute(QWebSettings::PluginsEnabled, true);
 	QWebSettings::globalSettings()->setAttribute(QWebSettings::AutoLoadImages, true);
-	SqlHandler *sqlplayer = new SqlHandler();
-	if(sqlplayer != NULL) {
-		QSqlQuery q = sqlplayer->select("SELECT a.assID, b.username FROM `assignment_status` AS a, `accounts` AS b WHERE a.submitted = 1 AND a.accID = b.accID ORDER BY a.timestamp");
-		while(q.next()) {
-			ui->tableWidget->insertRow(ui->tableWidget->rowCount());
-			ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 0, new QLabel("Opdracht " + QString::number(q.value(0).toInt()) + " - " + (q.value(1).toString())));
-		}
-		QStringList headers = QStringList();
-		headers.append(QString("Opdracht - Naam Student"));
-		ui->tableWidget->setHorizontalHeaderLabels(headers);
-		ui->tableWidget->horizontalHeader()->setVisible(true);
-		ui->tableWidget->horizontalHeaderItem(0)->setTextAlignment(Qt::AlignLeft);
-	}
+	this->refresh();
+	QTimer *timer = new QTimer(this);
+	connect(timer, SIGNAL(timeout()), this, SLOT(refresh()));
+	timer->start(15000);
 }
 
 DocentWindow::~DocentWindow()
@@ -39,8 +30,10 @@ DocentWindow::~DocentWindow()
 
 void DocentWindow::on_opdrachtBeheerButton_clicked()
 {
-    CreateWindow* w = new CreateWindow();
-    w->show();
+	DocentAssignmentsWindow* w = new DocentAssignmentsWindow();
+	w->exec();
+	delete w;
+	w = NULL;
 }
 
 void DocentWindow::on_compileButton_clicked()
@@ -56,7 +49,7 @@ void DocentWindow::on_submitButton_clicked()
 	bool overig = ui->checkboxOverig->isChecked();
 
 	QString score = QString::number(layout) + QString::number(werking) + QString::number(compileren) + QString::number(overig);
-	QString x = "UPDATE `assignment_status` AS a, `accounts` AS b SET a.score = '"+score+"', a.submitted = 0 WHERE a.assID = "+opdrachtNummer+" AND b.username = '"+ opdrachtMaker + "' AND a.accID = b.accID";
+	QString x = "UPDATE `assignment_status` AS a, `accounts` AS b SET a.score = '"+score+"', a.submitted = 0 WHERE a.assID = "+opdrachtNaam+" AND b.username = '"+ opdrachtMaker + "' AND a.accID = b.accID";
 	qDebug(x.toStdString().c_str());
 	SqlHandler *sqlplayer = new SqlHandler();
 	sqlplayer->alter(x);
@@ -79,21 +72,47 @@ void DocentWindow::on_tableWidget_cellDoubleClicked(int row, int column)
 
 	opdrachtRij = row;
 	QLabel *opdracht = (QLabel*) ui->tableWidget->cellWidget(row, 0);
-	opdrachtNummer = opdracht->text().mid(9, opdracht->text().length()-9);
-	QStringList opdrachtList= opdrachtNummer.split(" - ");
-	opdrachtNummer = opdrachtList[0];
+	opdrachtNaam = opdracht->text();
+	QStringList opdrachtList= opdrachtNaam.split(" - ");
+	opdrachtNaam = opdrachtList[0];
 	opdrachtMaker = opdrachtList[1];
 
-	QString x = "SELECT `instructions` FROM `assignments` WHERE `assID` = ";
-	QString y = "SELECT a.solution FROM `assignment_status` AS a, `accounts` AS b WHERE a.assID = " + opdrachtNummer + " AND b.username = '"+ opdrachtMaker + "' AND a.accID = b.accID";
 	SqlHandler *sqlplayer = new SqlHandler();
-	QSqlQuery q = sqlplayer->select(x + opdrachtNummer);
+	QString namegetter = "SELECT `assID` FROM `assignments` WHERE `naam` = '" + opdrachtNaam + "'";
+	QSqlQuery q = sqlplayer->select(namegetter);
+	q.next();
+	QString nummertje = q.value(0).toString();
+	opdrachtNaam = nummertje;
+
+	QString x = "SELECT `instructions` FROM `assignments` WHERE `assID` = " + nummertje ;
+	qDebug(x.toStdString().c_str());
+	q = sqlplayer->select(x);
+	QString y = "SELECT a.solution FROM `assignment_status` AS a, `accounts` AS b WHERE a.assID = " + nummertje + " AND b.username = '"+ opdrachtMaker + "' AND a.accID = b.accID";
 	q.next();
 	ui->opdrachtText->setText(q.value(0).toString());
 
 	QSqlQuery m = sqlplayer->select(y);
 	m.next();
 	ui->opdrachtCode->setText(m.value(0).toString());
+}
+
+void DocentWindow::refresh() {
+	ui->tableWidget->setRowCount(0);
+	SqlHandler *sqlplayer = new SqlHandler();
+	if(sqlplayer != NULL) {
+		QString terror = "SELECT c.naam, b.username FROM `assignment_status` AS a, `accounts` AS b, `assignments` AS c WHERE a.submitted = 1 AND a.accID = b.accID AND c.assID = a.assID";
+		QSqlQuery q = sqlplayer->select(terror);
+		qDebug(terror.toStdString().c_str());
+		while(q.next()) {
+			ui->tableWidget->insertRow(ui->tableWidget->rowCount());
+			ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 0, new QLabel((q.value(0).toString()) + " - " + (q.value(1).toString())));
+		}
+		QStringList headers = QStringList();
+		headers.append(QString("Opdracht - Naam Student"));
+		ui->tableWidget->setHorizontalHeaderLabels(headers);
+		ui->tableWidget->horizontalHeader()->setVisible(true);
+ui->tableWidget->horizontalHeaderItem(0)->setTextAlignment(Qt::AlignLeft);
+	}
 }
 
 void DocentWindow::on_logOutButton_clicked()

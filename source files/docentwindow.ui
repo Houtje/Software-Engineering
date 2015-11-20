@@ -610,6 +610,9 @@
     <property name="selectionBehavior">
      <enum>QAbstractItemView::SelectRows</enum>
     </property>
+    <property name="showGrid">
+     <bool>false</bool>
+    </property>
     <property name="rowCount">
      <number>0</number>
     </property>
@@ -859,7 +862,7 @@
       <x>360</x>
       <y>570</y>
       <width>701</width>
-      <height>31</height>
+      <height>42</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -868,6 +871,18 @@
      </property>
      <item>
       <widget class="QCheckBox" name="checkboxLayout">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QCheckBox::indicator {
+width: 40px;
+height: 40px;
+}</string>
+       </property>
        <property name="text">
         <string>Layout</string>
        </property>

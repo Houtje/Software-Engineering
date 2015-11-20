@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "sqlhandler.h"
+#include "registerwindows.h"
 
 namespace Ui {
 	class LogInDialog;
@@ -19,6 +20,8 @@ public:
 
 private slots:
 	void on_logInButton_clicked();
+
+	void on_registerButton_clicked();
 
 private:
 	Ui::LogInDialog *ui;

@@ -18,7 +18,10 @@ SOURCES += main.cpp \
     sqlhandler.cpp \
     logindialog.cpp \
     docentwindow.cpp \
-    createwindow.cpp
+    createwindow.cpp \
+    docentassignmentswindow.cpp \
+    registerwindows.cpp \
+    createwindowdialog.cpp
 
 HEADERS  += \
     studentwindow.h \
@@ -26,13 +29,19 @@ HEADERS  += \
     sqlhandler.h \
     logindialog.h \
     docentwindow.h \
-    createwindow.h
+    createwindow.h \
+    docentassignmentswindow.h \
+    registerwindows.h \
+    createwindowdialog.h
 
 FORMS    += \
     studentwindow.ui \
     logindialog.ui \
     docentwindow.ui \
-    createwindow.ui
+    createwindow.ui \
+    docentassignmentswindow.ui \
+    registerwindows.ui \
+    createwindowdialog.ui
 
 RESOURCES += \
     achievements.qrc

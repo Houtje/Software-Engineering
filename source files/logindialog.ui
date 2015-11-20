@@ -507,7 +507,7 @@
    </palette>
   </property>
   <property name="windowTitle">
-   <string>Project NAAM</string>
+   <string>eDuCoDe</string>
   </property>
   <widget class="QLineEdit" name="NameTextBox">
    <property name="geometry">
@@ -528,18 +528,31 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <strikeout>false</strikeout>
+    </font>
+   </property>
+   <property name="echoMode">
+    <enum>QLineEdit::Password</enum>
+   </property>
   </widget>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>180</x>
-     <y>50</y>
-     <width>91</width>
-     <height>16</height>
+     <x>140</x>
+     <y>35</y>
+     <width>131</width>
+     <height>31</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>20</pointsize>
+    </font>
+   </property>
    <property name="text">
-    <string>Project Naam</string>
+    <string>eDuCoDe</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_2">
