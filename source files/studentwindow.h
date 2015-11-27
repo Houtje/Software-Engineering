@@ -8,8 +8,21 @@
 #include <QLabel>
 #include <QMessageBox>
 #include "qrocheckbox.h"
+#include "sqlhandler.h"
+#include "form.h"
+#include "achievementlist.h"
+#include "horizontaldingie.h"
+#include "achievementhandler.h"
 
 namespace Ui {
+
+struct AchievementInfo {
+	QPixmap image;
+	QString name;
+	QString info;
+	QString score;
+};
+
 class StudentWindow;
 }
 
@@ -32,9 +45,13 @@ private slots:
 	void on_tableWidget_cellDoubleClicked(int row, int column);
 	void on_logOutButton_clicked();
 	void on_resetButton_clicked();
+	void on_achievementList_clicked(const QModelIndex &index);
+	void on_achievementList_clickie();
 
 private:
 	Ui::StudentWindow *ui;
+	Ui::AchievementInfo *achieveList;
+	int allAchievementListSize;
 	QString opdrachtNaam;
 	int ingelogde;
 	bool goLogin;

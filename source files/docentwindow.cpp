@@ -53,6 +53,12 @@ void DocentWindow::on_submitButton_clicked()
 	qDebug(x.toStdString().c_str());
 	SqlHandler *sqlplayer = new SqlHandler();
 	sqlplayer->alter(x);
+	QSqlQuery q = sqlplayer->select("SELECT `accID` FROM `accounts` WHERE `username` = '" + opdrachtMaker + "'");
+	int accid = 0;
+	if(q.next())
+		accid = q.value(0).toInt();
+	AchievementHandler *achieve = new AchievementHandler();
+	achieve->SubmitDocent(opdrachtNaam.toInt(), accid);
 	ui->tableWidget->removeRow(opdrachtRij);
 
 	ui->checkboxLayout->setChecked(false);

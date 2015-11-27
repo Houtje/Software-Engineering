@@ -21,7 +21,11 @@ SOURCES += main.cpp \
     createwindow.cpp \
     docentassignmentswindow.cpp \
     registerwindows.cpp \
-    createwindowdialog.cpp
+    createwindowdialog.cpp \
+    form.cpp \
+    achievementlist.cpp \
+    horizontaldingie.cpp \
+    achievementhandler.cpp
 
 HEADERS  += \
     studentwindow.h \
@@ -32,7 +36,11 @@ HEADERS  += \
     createwindow.h \
     docentassignmentswindow.h \
     registerwindows.h \
-    createwindowdialog.h
+    createwindowdialog.h \
+    form.h \
+    achievementlist.h \
+    horizontaldingie.h \
+    achievementhandler.h
 
 FORMS    += \
     studentwindow.ui \
@@ -41,7 +49,10 @@ FORMS    += \
     createwindow.ui \
     docentassignmentswindow.ui \
     registerwindows.ui \
-    createwindowdialog.ui
+    createwindowdialog.ui \
+    form.ui \
+    achievementlist.ui \
+    horizontaldingie.ui
 
 RESOURCES += \
     achievements.qrc

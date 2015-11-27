@@ -7,6 +7,7 @@
 #include <QNetworkProxyFactory>
 #include <QLabel>
 #include "qrocheckbox.h"
+#include "achievementhandler.h"
 
 namespace Ui {
 class DocentWindow;
