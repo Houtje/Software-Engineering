@@ -12,7 +12,7 @@ class Form : public QWidget
 	Q_OBJECT
 
 public:
-	explicit Form(QPixmap image, QString name, QString tooltip, QWidget *parent = 0);
+	explicit Form(QPixmap image, QString name, QString tooltip, QString score, QWidget *parent = 0);
 	~Form();
 
 private:

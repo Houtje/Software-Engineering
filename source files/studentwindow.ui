@@ -869,7 +869,7 @@
       <x>40</x>
       <y>20</y>
       <width>1071</width>
-      <height>71</height>
+      <height>65</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -1619,9 +1619,9 @@
    <widget class="QTableWidget" name="allAchievements">
     <property name="geometry">
      <rect>
-      <x>772</x>
+      <x>690</x>
       <y>20</y>
-      <width>339</width>
+      <width>419</width>
       <height>591</height>
      </rect>
     </property>
@@ -1678,7 +1678,7 @@
      <bool>false</bool>
     </attribute>
     <attribute name="horizontalHeaderDefaultSectionSize">
-     <number>160</number>
+     <number>200</number>
     </attribute>
     <attribute name="verticalHeaderVisible">
      <bool>false</bool>

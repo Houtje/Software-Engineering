@@ -52,6 +52,7 @@ private:
 	Ui::StudentWindow *ui;
 	Ui::AchievementInfo *achieveList;
 	int allAchievementListSize;
+	int lastAchievement;
 	QString opdrachtNaam;
 	int ingelogde;
 	bool goLogin;

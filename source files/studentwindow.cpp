@@ -7,6 +7,7 @@ StudentWindow::StudentWindow(int accID, QWidget *parent) :
 	ui(new Ui::StudentWindow)
 {
 	ui->setupUi(this);
+	lastAchievement = 0;
 	AchievementList *achieving = new AchievementList(ui->centralWidget);
 	achieving->setObjectName(QStringLiteral("achievementList"));
 	achieving->setGeometry(ui->achievementList->geometry());
@@ -81,49 +82,13 @@ StudentWindow::StudentWindow(int accID, QWidget *parent) :
 	q = sqlplayer->select(achievements);
 	while(q.next()) {
 		int pointylist = q.value(0).toInt() + (allAchievementListSize - 87);
-		QString imageString = ":/new/prefix1/plaatjes/achievements/notachieved/hidden.jpg";
+		QString imageString = ":/new/prefix1/plaatjes/achievements/notachieved/hidden.png";
 		achieveList[pointylist].image.load(imageString);
 		achieveList[pointylist].name = "???";
 		achieveList[pointylist].info = "???";
 		achieveList[pointylist].score = "???";
 	}
-	achievements = "SELECT `achID` FROM `achievements` WHERE `accID` = " + QString::number(ingelogde);
-	qDebug(achievements.toStdString().c_str());
-	q = sqlplayer->select(achievements);
-	while(q.next()) {
-		int pointylist = q.value(0).toInt();
-		if((pointylist - 81)>0) {
-			if((pointylist - 87) <0) {
-				pointylist = ((pointylist-82)+(allAchievementListSize-5));
-			}else {
-				pointylist -= 5;
-			}
-		}
-		int imageloader = q.value(0).toInt();
-		if(imageloader > 91) {
-			imageloader = 91;
-		}
-		QString rankAchieved = ":/new/prefix1/plaatjes/achievements/achieved/" + QString::number(imageloader) + ".png";
-		qDebug(rankAchieved.toStdString().c_str());
-		achieveList[pointylist].image.load(rankAchieved);
-	};
-	for(int i = 0; i < allAchievementListSize-5; i++) {
-		Form *newAchievement = new Form(achieveList[i].image, achieveList[i].name, achieveList[i].info);
-		if((i+1)%2)
-			ui->allAchievements->insertRow(ui->allAchievements->rowCount());
-		ui->allAchievements->setCellWidget(i/2, i%2, newAchievement);
-	}
-	ui->allAchievements->insertRow(ui->allAchievements->rowCount());
-	ui->allAchievements->setCellWidget(ui->allAchievements->rowCount()-1, 0, new Horizontaldingie());
-	ui->allAchievements->setCellWidget(ui->allAchievements->rowCount()-1, 1, new Horizontaldingie());
-	int hiddenlocator = 1;
-	if(allAchievementListSize%2) hiddenlocator = 0;
-	for(int i = allAchievementListSize-5; i < allAchievementListSize; i++) {
-		Form *newAchievement = new Form(achieveList[i].image, achieveList[i].name, achieveList[i].info);
-		if((i+hiddenlocator+1)%2)
-			ui->allAchievements->insertRow(ui->allAchievements->rowCount());
-		ui->allAchievements->setCellWidget((i+hiddenlocator)/2+1, (i+hiddenlocator)%2, newAchievement);
-	}
+
 	ui->allAchievements->hide();
 	this->refresh();
 	QTimer *timer = new QTimer(this);
@@ -198,7 +163,7 @@ void StudentWindow::refresh() {
 		q = sqlplayer->select(achieve);
 		while(q.next()) {
 			int achievementNumber = q.value(0).toInt();
-			QIcon achievementItem(":/new/prefix1/plaatjes/achievements/" + QString::number(achievementNumber) + ".jpg");
+			QIcon achievementItem(":/new/prefix1/plaatjes/achievements/achieved/" + QString::number(achievementNumber) + ".png");
 			QListWidgetItem *newItem = new QListWidgetItem(ui->achievementList);
 			ui->achievementList->setResizeMode(QListView::Adjust);
 			newItem->setIcon(achievementItem);
@@ -214,6 +179,29 @@ void StudentWindow::refresh() {
 		ui->tableWidget->setHorizontalHeaderLabels(headers);
 		ui->tableWidget->horizontalHeaderItem(0)->setTextAlignment(Qt::AlignLeft);
 		ui->tableWidget->horizontalHeader()->setVisible(true);
+		QString achievements = "SELECT b.`achID`, b.`name`, b.`description`, b.`score` FROM `achievements` AS a, `achievement_list` AS b WHERE a.`accID` = " + QString::number(ingelogde) + " AND a.achID = b.achID";
+		qDebug(achievements.toStdString().c_str());
+		q = sqlplayer->select(achievements);
+		while(q.next()) {
+			int pointylist = q.value(0).toInt();
+			if((pointylist - 81)>0) {
+				if((pointylist - 87) <0) {
+					pointylist = ((pointylist-82)+(allAchievementListSize-5));
+				}else {
+					pointylist -= 5;
+				}
+			}
+			int imageloader = q.value(0).toInt();
+			if(imageloader > 91) {
+				imageloader = 91;
+			}
+			QString rankAchieved = ":/new/prefix1/plaatjes/achievements/achieved/" + QString::number(imageloader) + ".png";
+			qDebug(rankAchieved.toStdString().c_str());
+			achieveList[pointylist].name = q.value(1).toString();
+			achieveList[pointylist].info = q.value(2).toString();
+			achieveList[pointylist].score = q.value(3).toString();
+			achieveList[pointylist].image.load(rankAchieved);
+		};
 	}
 }
 
@@ -297,20 +285,50 @@ void StudentWindow::on_resetButton_clicked()
 	}
 }
 
-void StudentWindow::on_achievementList_clicked(const QModelIndex &index)
-{
-	qDebug("Hallo");
-	if(ui->allAchievements->isHidden())
-		ui->allAchievements->show();
-	else
-		ui->allAchievements->hide();
-}
+void StudentWindow::on_achievementList_clicked(const QModelIndex &index){}
 
 void StudentWindow::on_achievementList_clickie() {
 	qDebug("Hallo2");
-	if(ui->allAchievements->isHidden())
+	if(ui->allAchievements->isHidden()) {
+		ui->allAchievements->setRowCount(0);
+		//'andere' achievements
+		int hiddenAchievements = 5;
+		int specialAchievements = 21;
+		int rememberInt = 0;
+		int i;
+		ui->allAchievements->insertRow(ui->allAchievements->rowCount());
+		ui->allAchievements->setCellWidget(ui->allAchievements->rowCount()-1, 0, new Horizontaldingie("Easy"));
+		ui->allAchievements->setCellWidget(ui->allAchievements->rowCount()-1, 1, new Horizontaldingie());
+		for(i = 0; i < allAchievementListSize-hiddenAchievements-specialAchievements-1; i++) {
+			Form *newAchievement = new Form(achieveList[i].image, achieveList[i].name, achieveList[i].info, achieveList[i].score);
+			if((i+1)%2)
+				ui->allAchievements->insertRow(ui->allAchievements->rowCount());
+			ui->allAchievements->setCellWidget(ui->allAchievements->rowCount()-1, i%2, newAchievement);
+		}
+		rememberInt = i;
+		ui->allAchievements->insertRow(ui->allAchievements->rowCount());
+		ui->allAchievements->setCellWidget(ui->allAchievements->rowCount()-1, 0, new Horizontaldingie("Hard"));
+		ui->allAchievements->setCellWidget(ui->allAchievements->rowCount()-1, 1, new Horizontaldingie());
+		for(i = 0; i < allAchievementListSize-hiddenAchievements-rememberInt; i++) {
+			Form *newAchievement = new Form(achieveList[i+rememberInt].image, achieveList[i+rememberInt].name, achieveList[i+rememberInt].info, achieveList[i+rememberInt].score);
+			if((i+1)%2)
+				ui->allAchievements->insertRow(ui->allAchievements->rowCount());
+			ui->allAchievements->setCellWidget(ui->allAchievements->rowCount()-1, (i)%2, newAchievement);
+		}
+		rememberInt += i;
+		qDebug(QString::number(ui->allAchievements->rowCount()).toStdString().c_str());
+		ui->allAchievements->insertRow(ui->allAchievements->rowCount());
+		ui->allAchievements->setCellWidget(ui->allAchievements->rowCount()-1, 0, new Horizontaldingie("Secret"));
+		ui->allAchievements->setCellWidget(ui->allAchievements->rowCount()-1, 1, new Horizontaldingie());
+		for(i = 0; i < allAchievementListSize-rememberInt; i++) {
+			Form *newAchievement = new Form(achieveList[i+rememberInt].image, achieveList[i+rememberInt].name, achieveList[i+rememberInt].info, achieveList[i+rememberInt].score);
+			if((i+1)%2)
+				ui->allAchievements->insertRow(ui->allAchievements->rowCount());
+			ui->allAchievements->setCellWidget(ui->allAchievements->rowCount()-1, i%2, newAchievement);
+		}
 		ui->allAchievements->show();
-	else
+	} else {
 		ui->allAchievements->hide();
+	}
 
 }

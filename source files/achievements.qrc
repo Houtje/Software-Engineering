@@ -12,10 +12,37 @@
         <file>plaatjes/achievements/achieved/89.png</file>
         <file>plaatjes/achievements/achieved/90.png</file>
         <file>plaatjes/achievements/achieved/91.png</file>
-        <file>plaatjes/achievements/notachieved/90.png</file>
-        <file>plaatjes/achievements/notachieved/91.png</file>
+        <file>plaatjes/achievements/notachieved/hidden.png</file>
         <file>plaatjes/achievements/notachieved/87.png</file>
         <file>plaatjes/achievements/notachieved/88.png</file>
         <file>plaatjes/achievements/notachieved/89.png</file>
+        <file>plaatjes/achievements/notachieved/90.png</file>
+        <file>plaatjes/achievements/notachieved/91.png</file>
+        <file>plaatjes/achievements/notachieved/1.png</file>
+        <file>plaatjes/achievements/notachieved/2.png</file>
+        <file>plaatjes/achievements/notachieved/3.png</file>
+        <file>plaatjes/achievements/notachieved/4.png</file>
+        <file>plaatjes/achievements/notachieved/5.png</file>
+        <file>plaatjes/achievements/notachieved/43.png</file>
+        <file>plaatjes/achievements/notachieved/44.png</file>
+        <file>plaatjes/achievements/notachieved/45.png</file>
+        <file>plaatjes/achievements/notachieved/74.png</file>
+        <file>plaatjes/achievements/notachieved/75.png</file>
+        <file>plaatjes/achievements/notachieved/82.png</file>
+        <file>plaatjes/achievements/achieved/1.png</file>
+        <file>plaatjes/achievements/achieved/2.png</file>
+        <file>plaatjes/achievements/achieved/3.png</file>
+        <file>plaatjes/achievements/achieved/4.png</file>
+        <file>plaatjes/achievements/achieved/5.png</file>
+        <file>plaatjes/achievements/achieved/43.png</file>
+        <file>plaatjes/achievements/achieved/44.png</file>
+        <file>plaatjes/achievements/achieved/45.png</file>
+        <file>plaatjes/achievements/achieved/74.png</file>
+        <file>plaatjes/achievements/achieved/75.png</file>
+        <file>plaatjes/achievements/achieved/82.png</file>
+        <file>plaatjes/achievements/notachieved/0.bmp</file>
+        <file>plaatjes/achievements/notachieved/0.png</file>
+        <file>plaatjes/achievements/achieved/0.png</file>
+        <file>plaatjes/achievements/achieved/86.png</file>
     </qresource>
 </RCC>

@@ -861,7 +861,7 @@
      <rect>
       <x>360</x>
       <y>570</y>
-      <width>701</width>
+      <width>491</width>
       <height>42</height>
      </rect>
     </property>
@@ -876,12 +876,6 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QCheckBox::indicator {
-width: 40px;
-height: 40px;
-}</string>
        </property>
        <property name="text">
         <string>Layout</string>

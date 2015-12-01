@@ -12,7 +12,7 @@ class Horizontaldingie : public QWidget
 	Q_OBJECT
 
 public:
-	explicit Horizontaldingie(QWidget *parent = 0);
+	explicit Horizontaldingie(QString textLabel = "", QWidget *parent = 0);
 	~Horizontaldingie();
 
 private:
