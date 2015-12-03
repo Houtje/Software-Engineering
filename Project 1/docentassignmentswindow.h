@@ -30,6 +30,9 @@ private:
 	Ui::DocentAssignmentsWindow *ui;
 	CreateWindowDialog *cw;
 	int row;
+    SqlHandler *sqlplayer;
+    QString message;
+    QSqlQuery query;
 };
 
 #endif // DOCENTASSIGNMENTSWINDOW_H

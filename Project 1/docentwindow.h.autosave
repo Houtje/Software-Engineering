@@ -44,6 +44,7 @@ private:
 	QString opdrachtNaam;
 	QString opdrachtMaker;
     SqlHandler *sqlplayer;
+    AchievementHandler *achieve;
     QString message;
     QSqlQuery query;
 	int opdrachtRij;

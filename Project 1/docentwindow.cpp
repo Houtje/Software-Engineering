@@ -1,7 +1,4 @@
 #include "docentwindow.h"
-#include "docentassignmentswindow.h"
-#include "ui_docentwindow.h"
-#include "sqlhandler.h"
 
 DocentWindow::DocentWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -9,22 +6,24 @@ DocentWindow::DocentWindow(QWidget *parent) :
 {
 	ui->setupUi(this);
 
-    QString string = ":/new/prefix1/plaatjes/golden_cup.png";
-    setWindowIcon(QIcon(string));
+    QString string = ":/new/prefix1/plaatjes/poweroff.png";
+    goLogin = false;
+    sqlplayer = new SqlHandler();
+    achieve = new AchievementHandler();
+    QHeaderView *headerView = new QHeaderView(Qt::Horizontal, ui->tableWidget);
 
-	goLogin = false;
-	QHeaderView *headerView = new QHeaderView(Qt::Horizontal, ui->tableWidget);
+    setWindowIcon(QIcon(string));
 	ui->tableWidget->setHorizontalHeader(headerView);
 	headerView->setSectionResizeMode(0, QHeaderView::Stretch);
-	//ui->tableWidget->setColumnWidth(0, ui->tableWidget->width() - 88);
-	//ui->assignmentList->setStyleSheet( "QListWidget::item { border: 1px solid black; } " );
 	QNetworkProxyFactory::setUseSystemConfiguration(true);
 	QWebSettings::globalSettings()->setAttribute(QWebSettings::PluginsEnabled, true);
 	QWebSettings::globalSettings()->setAttribute(QWebSettings::AutoLoadImages, true);
 	this->refresh();
+
+
 	QTimer *timer = new QTimer(this);
 	connect(timer, SIGNAL(timeout()), this, SLOT(refresh()));
-	timer->start(15000);
+    timer->start(5000);
 }
 
 DocentWindow::~DocentWindow()
@@ -53,15 +52,13 @@ void DocentWindow::on_submitButton_clicked()
 	bool overig = ui->checkboxOverig->isChecked();
 
 	QString score = QString::number(layout) + QString::number(werking) + QString::number(compileren) + QString::number(overig);
-	QString x = "UPDATE `assignment_status` AS a, `accounts` AS b SET a.score = '"+score+"', a.submitted = 0 WHERE a.assID = "+opdrachtNaam+" AND b.username = '"+ opdrachtMaker + "' AND a.accID = b.accID";
-	SqlHandler *sqlplayer = new SqlHandler();
+    message = "UPDATE `assignment_status` AS a, `accounts` AS b SET a.score = '"+score+"', a.submitted = 0 WHERE a.assID = "+opdrachtNaam+" AND b.username = '"+ opdrachtMaker + "' AND a.accID = b.accID";
 	sqlplayer->alter(x);
-	QSqlQuery q = sqlplayer->select("SELECT `accID` FROM `accounts` WHERE `username` = '" + opdrachtMaker + "'");
-	int accid = 0;
-	if(q.next())
-		accid = q.value(0).toInt();
-	AchievementHandler *achieve = new AchievementHandler();
-	achieve->SubmitDocent(opdrachtNaam.toInt(), accid);
+    query = sqlplayer->select("SELECT `accID` FROM `accounts` WHERE `username` = '" + opdrachtMaker + "'");
+    int accID = 0;
+    if(query.next())
+        accID = query.value(0).toInt();
+    achieve->SubmitDocent(opdrachtNaam.toInt(), accID);
 	ui->tableWidget->removeRow(opdrachtRij);
 
 	ui->checkboxLayout->setChecked(false);
@@ -88,39 +85,36 @@ void DocentWindow::on_tableWidget_cellDoubleClicked(int row)
 	opdrachtNaam = opdrachtList[0];
 	opdrachtMaker = opdrachtList[1];
 
-	SqlHandler *sqlplayer = new SqlHandler();
-	QString namegetter = "SELECT `assID` FROM `assignments` WHERE `naam` = '" + opdrachtNaam + "'";
-	QSqlQuery q = sqlplayer->select(namegetter);
-	q.next();
-	QString nummertje = q.value(0).toString();
-	opdrachtNaam = nummertje;
+    message = "SELECT `assID` FROM `assignments` WHERE `naam` = '" + opdrachtNaam + "'";
+    query = sqlplayer->select(message);
+    query.next();
+    opdrachtNaam = query.value(0).toString();
 
-	QString x = "SELECT `instructions` FROM `assignments` WHERE `assID` = " + nummertje ;
-	q = sqlplayer->select(x);
-	QString y = "SELECT a.solution FROM `assignment_status` AS a, `accounts` AS b WHERE a.assID = " + nummertje + " AND b.username = '"+ opdrachtMaker + "' AND a.accID = b.accID";
-	q.next();
-	ui->opdrachtText->setText(q.value(0).toString());
+    message = "SELECT `instructions` FROM `assignments` WHERE `assID` = " + opdrachtNaam ;
+    query = sqlplayer->select(message);
+    query.next();
+    ui->opdrachtText->setText(query.value(0).toString());
 
-	QSqlQuery m = sqlplayer->select(y);
-	m.next();
-	ui->opdrachtCode->setText(m.value(0).toString());
+    message = "SELECT a.solution FROM `assignment_status` AS a, `accounts` AS b WHERE a.assID = " + opdrachtNaam + " AND b.username = '"+ opdrachtMaker + "' AND a.accID = b.accID";
+    query = sqlplayer->select(message);
+    query.next();
+    ui->opdrachtCode->setText(query.value(0).toString());
 }
 
 void DocentWindow::refresh() {
 	ui->tableWidget->setRowCount(0);
-	SqlHandler *sqlplayer = new SqlHandler();
 	if(sqlplayer != NULL) {
-		QString terror = "SELECT c.naam, b.username FROM `assignment_status` AS a, `accounts` AS b, `assignments` AS c WHERE a.submitted = 1 AND a.accID = b.accID AND c.assID = a.assID";
-		QSqlQuery q = sqlplayer->select(terror);
-		while(q.next()) {
+        message = "SELECT c.naam, b.username FROM `assignment_status` AS a, `accounts` AS b, `assignments` AS c WHERE a.submitted = 1 AND a.accID = b.accID AND c.assID = a.assID";
+        query = sqlplayer->select(message);
+        while(query.next()) {
 			ui->tableWidget->insertRow(ui->tableWidget->rowCount());
-			ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 0, new QLabel((q.value(0).toString()) + " - " + (q.value(1).toString())));
+            ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 0, new QLabel((query.value(0).toString()) + " - " + (query.value(1).toString())));
 		}
 		QStringList headers = QStringList();
 		headers.append(QString("Opdracht - Naam Student"));
 		ui->tableWidget->setHorizontalHeaderLabels(headers);
 		ui->tableWidget->horizontalHeader()->setVisible(true);
-ui->tableWidget->horizontalHeaderItem(0)->setTextAlignment(Qt::AlignLeft);
+        ui->tableWidget->horizontalHeaderItem(0)->setTextAlignment(Qt::AlignLeft);
 	}
 }
 
@@ -139,10 +133,8 @@ bool DocentWindow::keepGoing() {
 
 void DocentWindow::on_funnyButton_clicked()
 {
-    AchievementHandler *achieve = new AchievementHandler();
-    SqlHandler * q = new SqlHandler();
-    QString message = "SELECT `accID` FROM `accounts` WHERE `username` = '" + opdrachtMaker + "'";
-    QSqlQuery query = q->select(message);
+    message = "SELECT `accID` FROM `accounts` WHERE `username` = '" + opdrachtMaker + "'";
+    query = sqlplayer->select(message);
     query.first();
     achieve->Prankster(query.value(0).toInt());
 

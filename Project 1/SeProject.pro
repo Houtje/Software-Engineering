@@ -18,7 +18,6 @@ SOURCES += main.cpp \
     sqlhandler.cpp \
     logindialog.cpp \
     docentwindow.cpp \
-    createwindow.cpp \
     docentassignmentswindow.cpp \
     registerwindows.cpp \
     createwindowdialog.cpp \
@@ -33,7 +32,6 @@ HEADERS  += \
     sqlhandler.h \
     logindialog.h \
     docentwindow.h \
-    createwindow.h \
     docentassignmentswindow.h \
     registerwindows.h \
     createwindowdialog.h \
@@ -46,7 +44,6 @@ FORMS    += \
     studentwindow.ui \
     logindialog.ui \
     docentwindow.ui \
-    createwindow.ui \
     docentassignmentswindow.ui \
     registerwindows.ui \
     createwindowdialog.ui \

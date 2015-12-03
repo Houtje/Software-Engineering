@@ -2,6 +2,8 @@
 #define CREATEWINDOWDIALOG_H
 
 #include <QDialog>
+#include "ui_createwindowdialog.h"
+#include "sqlhandler.h"
 
 namespace Ui {
 class CreateWindowDialog;
@@ -22,6 +24,10 @@ private slots:
 private:
 	Ui::CreateWindowDialog *ui;
 	int assID;
+    SqlHandler *sqlplayer;
+    QString message;
+    QSqlQuery query;
+
 };
 
 
