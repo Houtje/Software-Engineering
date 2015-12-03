@@ -14,7 +14,6 @@ AchievementList::~AchievementList()
 }
 
 void AchievementList::mousePressEvent(QMouseEvent *e) {
-	qDebug("Mouse Press event");
 	emit clicked();
 	QListWidget::mousePressEvent(e);
 }

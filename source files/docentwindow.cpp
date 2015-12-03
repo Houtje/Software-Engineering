@@ -8,6 +8,10 @@ DocentWindow::DocentWindow(QWidget *parent) :
 	ui(new Ui::DocentWindow)
 {
 	ui->setupUi(this);
+
+    QString string = ":/new/prefix1/plaatjes/golden_cup.png";
+    setWindowIcon(QIcon(string));
+
 	goLogin = false;
 	QHeaderView *headerView = new QHeaderView(Qt::Horizontal, ui->tableWidget);
 	ui->tableWidget->setHorizontalHeader(headerView);
@@ -50,7 +54,6 @@ void DocentWindow::on_submitButton_clicked()
 
 	QString score = QString::number(layout) + QString::number(werking) + QString::number(compileren) + QString::number(overig);
 	QString x = "UPDATE `assignment_status` AS a, `accounts` AS b SET a.score = '"+score+"', a.submitted = 0 WHERE a.assID = "+opdrachtNaam+" AND b.username = '"+ opdrachtMaker + "' AND a.accID = b.accID";
-	qDebug(x.toStdString().c_str());
 	SqlHandler *sqlplayer = new SqlHandler();
 	sqlplayer->alter(x);
 	QSqlQuery q = sqlplayer->select("SELECT `accID` FROM `accounts` WHERE `username` = '" + opdrachtMaker + "'");
@@ -69,12 +72,14 @@ void DocentWindow::on_submitButton_clicked()
 	ui->opdrachtText->setText("");
 	ui->compileButton->setDisabled(true);
 	ui->submitButton->setDisabled(true);
+    ui->funnyButton->setDisabled(true);
 }
 
-void DocentWindow::on_tableWidget_cellDoubleClicked(int row, int column)
+void DocentWindow::on_tableWidget_cellDoubleClicked(int row)
 {
 	ui->compileButton->setDisabled(false);
 	ui->submitButton->setDisabled(false);
+    ui->funnyButton->setDisabled(false);
 
 	opdrachtRij = row;
 	QLabel *opdracht = (QLabel*) ui->tableWidget->cellWidget(row, 0);
@@ -91,7 +96,6 @@ void DocentWindow::on_tableWidget_cellDoubleClicked(int row, int column)
 	opdrachtNaam = nummertje;
 
 	QString x = "SELECT `instructions` FROM `assignments` WHERE `assID` = " + nummertje ;
-	qDebug(x.toStdString().c_str());
 	q = sqlplayer->select(x);
 	QString y = "SELECT a.solution FROM `assignment_status` AS a, `accounts` AS b WHERE a.assID = " + nummertje + " AND b.username = '"+ opdrachtMaker + "' AND a.accID = b.accID";
 	q.next();
@@ -108,7 +112,6 @@ void DocentWindow::refresh() {
 	if(sqlplayer != NULL) {
 		QString terror = "SELECT c.naam, b.username FROM `assignment_status` AS a, `accounts` AS b, `assignments` AS c WHERE a.submitted = 1 AND a.accID = b.accID AND c.assID = a.assID";
 		QSqlQuery q = sqlplayer->select(terror);
-		qDebug(terror.toStdString().c_str());
 		while(q.next()) {
 			ui->tableWidget->insertRow(ui->tableWidget->rowCount());
 			ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 0, new QLabel((q.value(0).toString()) + " - " + (q.value(1).toString())));
@@ -132,4 +135,15 @@ bool DocentWindow::keepGoing() {
 	bool tempLogin = goLogin;
 	goLogin = false;
 	return tempLogin;
+}
+
+void DocentWindow::on_funnyButton_clicked()
+{
+    AchievementHandler *achieve = new AchievementHandler();
+    SqlHandler * q = new SqlHandler();
+    QString message = "SELECT `accID` FROM `accounts` WHERE `username` = '" + opdrachtMaker + "'";
+    QSqlQuery query = q->select(message);
+    query.first();
+    achieve->Prankster(query.value(0).toInt());
+
 }

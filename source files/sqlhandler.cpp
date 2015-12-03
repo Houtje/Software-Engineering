@@ -63,9 +63,9 @@ void SqlHandler::alterMW(QString table ,QString column1 , QString waarde, QStrin
 
 QSqlQuery SqlHandler::select(QString str){
     QSqlDatabase db = connect();
+	QSqlQuery q;
     if(db.open()){
-        //creating all the collumns
-        QSqlQuery q;
+		//creating all the collumns
 		//this is the actual query
         q.exec(str);
         QSqlRecord x = q.record();
@@ -80,12 +80,12 @@ QSqlQuery SqlHandler::select(QString str){
             }
         }
 		*/
-		return q;
      }
     //this will give errors if the database cannot befound
 	else{
 		std::cout << "Error: " << std::endl;
     }
+	return q;
 }
 /*
 void SqlHandler::insert(QString table ,QString column1 , QString Waarde, QString whereState1 , QString whereState2 ){

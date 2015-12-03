@@ -6,6 +6,9 @@ RegisterWindows::RegisterWindows(QWidget *parent) :
     ui(new Ui::RegisterWindows)
 {
 	ui->setupUi(this);
+
+    QString string = ":/new/prefix1/plaatjes/golden_cup.png";
+    setWindowIcon(QIcon(string));
 }
 
 RegisterWindows::~RegisterWindows()
@@ -22,7 +25,6 @@ void RegisterWindows::on_pushButton_clicked()
 		if(namen.length() == 2) {
 			SqlHandler *sqlplayer = new SqlHandler();
 			QString alter = "INSERT INTO Accounts (accID, username, password, admin) VALUES ('0','" + username + "','" + password + "','0')";
-			qDebug(alter.toStdString().c_str());
 			sqlplayer->alter(alter);
 			alter = "INSERT INTO `assignment_status`(`assID`, `accID`, `solution`) SELECT a.assID, MAX(b.accID), a.skeletcode FROM `assignments` as a JOIN `accounts` as b GROUP BY a.assID";
 			sqlplayer->alter(alter);

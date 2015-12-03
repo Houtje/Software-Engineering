@@ -7,6 +7,8 @@ LogInDialog::LogInDialog(QWidget *parent) :
 	ui(new Ui::LogInDialog)
 {
 	ui->setupUi(this);
+    QString string = ":/new/prefix1/plaatjes/golden_cup.png";
+    setWindowIcon(QIcon(string));
 }
 
 LogInDialog::~LogInDialog()
@@ -17,13 +19,13 @@ LogInDialog::~LogInDialog()
 
 void LogInDialog::on_logInButton_clicked()
 {
+	ui->NameTextBox->setFocus();
 	QString name = ui->NameTextBox->text();
 	QString pass = ui->PassTextBox->text();
 
 	SqlHandler *sqlPlayer = new SqlHandler();
 	QString x = "SELECT `accID`, `admin` FROM `accounts` WHERE `username` = '" + name + "' AND `password` = '" + pass + "'";
 	QSqlQuery q = sqlPlayer->select(x);
-	qDebug(x.toStdString().c_str());
 	if(q.next()) {
 		accountID = q.value(0).toInt();
 		docent = q.value(1).toInt();

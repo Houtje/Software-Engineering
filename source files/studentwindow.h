@@ -42,10 +42,10 @@ private slots:
 	void on_compileButton_clicked();
 	void on_submitButton_clicked();
 	void on_opslaanButton_clicked();
-	void on_tableWidget_cellDoubleClicked(int row, int column);
+    void on_tableWidget_cellDoubleClicked(int row);
 	void on_logOutButton_clicked();
 	void on_resetButton_clicked();
-	void on_achievementList_clicked(const QModelIndex &index);
+    void on_achievementList_clicked();
 	void on_achievementList_clickie();
 
 private:

@@ -29,9 +29,11 @@ private slots:
 	void on_opdrachtBeheerButton_clicked();
 	void on_compileButton_clicked();
 	void on_submitButton_clicked();
-	void on_tableWidget_cellDoubleClicked(int row, int column);
+    void on_tableWidget_cellDoubleClicked(int row);
 
 	void on_logOutButton_clicked();
+
+    void on_funnyButton_clicked();
 
 private:
 	Ui::DocentWindow *ui;

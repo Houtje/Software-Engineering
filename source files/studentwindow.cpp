@@ -7,6 +7,10 @@ StudentWindow::StudentWindow(int accID, QWidget *parent) :
 	ui(new Ui::StudentWindow)
 {
 	ui->setupUi(this);
+
+    QString string = ":/new/prefix1/plaatjes/golden_cup.png";
+    setWindowIcon(QIcon(string));
+
 	lastAchievement = 0;
 	AchievementList *achieving = new AchievementList(ui->centralWidget);
 	achieving->setObjectName(QStringLiteral("achievementList"));
@@ -51,7 +55,6 @@ StudentWindow::StudentWindow(int accID, QWidget *parent) :
 		allAchievementListSize = sizey.value(0).toInt() + 1;
 	achieveList = new Ui::AchievementInfo [allAchievementListSize];
 	QString username = "SELECT `username` FROM `accounts` WHERE `accID` = " + QString::number(accID);
-	qDebug(username.toStdString().c_str());
 	QSqlQuery n = sqlplayer->select(username);
 	if(n.next()) {
 		ui->nameLabel->setText(n.value(0).toString().toStdString().c_str());
@@ -70,7 +73,6 @@ StudentWindow::StudentWindow(int accID, QWidget *parent) :
 			imageloader = 91;
 		}
 		QString imageString = ":/new/prefix1/plaatjes/achievements/notachieved/" + QString::number(imageloader) + ".png";
-		qDebug(imageString.toStdString().c_str());
 		Ui::AchievementInfo info;
 		info.image.load(imageString);
 		info.name = q.value(1).toString();
@@ -138,10 +140,27 @@ void StudentWindow::refresh() {
 	SqlHandler *sqlplayer = new SqlHandler();
 	ui->tableWidget->setRowCount(0);
 	if(sqlplayer != NULL) {
-		QSqlQuery q = sqlplayer->select("SELECT a.`naam`, b.`score` FROM `assignments` AS a, `assignment_status` AS b WHERE a.`assID` = b.`assID` AND b.`accID` = " + QString::number(ingelogde) + " ORDER BY a.`assID` ASC");
+		ui->tableWidget->insertRow(ui->tableWidget->rowCount());
+		QTableWidgetItem *item = new QTableWidgetItem("easy");
+		item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+		QFont fonty;
+		fonty.setBold(true);
+		item->setFont(fonty);
+		item->setBackgroundColor(Qt::gray);
+		ui->tableWidget->setItem(ui->tableWidget->rowCount()-1,0, item);
+		item = new QTableWidgetItem();
+		item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+		item->setBackgroundColor(Qt::gray);
+		ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 1, new QTableWidgetItem(*item));
+		ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 2, new QTableWidgetItem(*item));
+		ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 3, new QTableWidgetItem(*item));
+		ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 4, new QTableWidgetItem(*item));
+		delete item;
+		QSqlQuery q = sqlplayer->select("SELECT a.`naam`, b.`score` FROM `assignments` AS a, `assignment_status` AS b WHERE a.`assID` = b.`assID` AND b.`accID` = " + QString::number(ingelogde) + " AND a.`sets` = 'easy' ORDER BY a.`assID` ASC");
 		while(q.next()) {
 			ui->tableWidget->insertRow(ui->tableWidget->rowCount());
 			ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 0, new QLabel(q.value(0).toString()));
+			ui->tableWidget->cellWidget(ui->tableWidget->rowCount()-1, 0)->setContentsMargins(5, 0, 0, 0);
 			if(q.value(1).toString().compare("")){
 				ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 1, new QROCheckBox("", (q.value(1).toInt() / 1000) & 1));
 				ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 2, new QROCheckBox("", (q.value(1).toInt() / 100) & 1));
@@ -149,14 +168,60 @@ void StudentWindow::refresh() {
 				ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 4, new QROCheckBox("", (q.value(1).toInt() & 1)));
 
 			}
-			/*
-			 * AssignmentListItem *assignmentItem = new AssignmentListItem( q.value(0).toInt(), q.value(1).toInt(), this);
-			 * QListWidgetItem *newitem = new QListWidgetItem(ui->assignmentList);
-			 * newitem->setSizeHint(assignmentItem->minimumSizeHint());
-			 * ui->assignmentList->addItem(newitem);
-			 * ui->assignmentList->setItemWidget(newitem, assignmentItem);
-			 * connect( assignmentItem, SIGNAL(mouseDoubleClickEvent()), this, SLOT(on_testButton_clicked()));
-			*/
+		}
+		ui->tableWidget->insertRow(ui->tableWidget->rowCount());
+		item = new QTableWidgetItem("medium");
+		item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+		item->setFont(fonty);
+		item->setBackgroundColor(Qt::gray);
+		ui->tableWidget->setItem(ui->tableWidget->rowCount()-1,0, item);
+		item = new QTableWidgetItem();
+		item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+		item->setBackgroundColor(Qt::gray);
+		ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 1, new QTableWidgetItem(*item));
+		ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 2, new QTableWidgetItem(*item));
+		ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 3, new QTableWidgetItem(*item));
+		ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 4, new QTableWidgetItem(*item));
+		delete item;
+		q = sqlplayer->select("SELECT a.`naam`, b.`score` FROM `assignments` AS a, `assignment_status` AS b WHERE a.`assID` = b.`assID` AND b.`accID` = " + QString::number(ingelogde) + " AND a.`sets` = 'medium' ORDER BY a.`assID` ASC");
+		while(q.next()) {
+			ui->tableWidget->insertRow(ui->tableWidget->rowCount());
+			ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 0, new QLabel(q.value(0).toString()));
+			ui->tableWidget->cellWidget(ui->tableWidget->rowCount()-1, 0)->setContentsMargins(5, 0, 0, 0);
+			if(q.value(1).toString().compare("")){
+				ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 1, new QROCheckBox("", (q.value(1).toInt() / 1000) & 1));
+				ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 2, new QROCheckBox("", (q.value(1).toInt() / 100) & 1));
+				ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 3, new QROCheckBox("", (q.value(1).toInt() / 10) & 1));
+				ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 4, new QROCheckBox("", (q.value(1).toInt() & 1)));
+
+			}
+		}
+		ui->tableWidget->insertRow(ui->tableWidget->rowCount());
+		item = new QTableWidgetItem("hard");
+		item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+		item->setFont(fonty);
+		item->setBackgroundColor(Qt::gray);
+		ui->tableWidget->setItem(ui->tableWidget->rowCount()-1,0, item);
+		item = new QTableWidgetItem();
+		item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+		item->setBackgroundColor(Qt::gray);
+		ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 1, new QTableWidgetItem(*item));
+		ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 2, new QTableWidgetItem(*item));
+		ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 3, new QTableWidgetItem(*item));
+		ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 4, new QTableWidgetItem(*item));
+		delete item;
+		q = sqlplayer->select("SELECT a.`naam`, b.`score` FROM `assignments` AS a, `assignment_status` AS b WHERE a.`assID` = b.`assID` AND b.`accID` = " + QString::number(ingelogde) + " AND a.`sets` = 'hard' ORDER BY a.`assID` ASC");
+		while(q.next()) {
+			ui->tableWidget->insertRow(ui->tableWidget->rowCount());
+			ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 0, new QLabel(q.value(0).toString()));
+			ui->tableWidget->cellWidget(ui->tableWidget->rowCount()-1, 0)->setContentsMargins(5, 0, 0, 0);
+			if(q.value(1).toString().compare("")){
+				ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 1, new QROCheckBox("", (q.value(1).toInt() / 1000) & 1));
+				ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 2, new QROCheckBox("", (q.value(1).toInt() / 100) & 1));
+				ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 3, new QROCheckBox("", (q.value(1).toInt() / 10) & 1));
+				ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 4, new QROCheckBox("", (q.value(1).toInt() & 1)));
+
+			}
 		}
 		ui->achievementList->clear();
 		QString achieve = "SELECT `achID` FROM `achievements` WHERE `accID` = " + QString::number(ingelogde);
@@ -168,7 +233,7 @@ void StudentWindow::refresh() {
 			ui->achievementList->setResizeMode(QListView::Adjust);
 			newItem->setIcon(achievementItem);
 			newItem->setSizeHint(achievementItem.actualSize(QSize(100, 50)));
-			ui->achievementList->addItem( newItem);
+			ui->achievementList->addItem(newItem);
 		}
 		QStringList headers = QStringList();
 		headers.append(QString("Naam"));
@@ -179,8 +244,7 @@ void StudentWindow::refresh() {
 		ui->tableWidget->setHorizontalHeaderLabels(headers);
 		ui->tableWidget->horizontalHeaderItem(0)->setTextAlignment(Qt::AlignLeft);
 		ui->tableWidget->horizontalHeader()->setVisible(true);
-		QString achievements = "SELECT b.`achID`, b.`name`, b.`description`, b.`score` FROM `achievements` AS a, `achievement_list` AS b WHERE a.`accID` = " + QString::number(ingelogde) + " AND a.achID = b.achID";
-		qDebug(achievements.toStdString().c_str());
+		QString achievements = "SELECT b.`achID`, b.`name`, b.`description`, b.`score` FROM `achievements` AS a, `achievement_list` AS b WHERE a.`accID` = " + QString::number(ingelogde) + " AND a.achID = b.achID";;
 		q = sqlplayer->select(achievements);
 		while(q.next()) {
 			int pointylist = q.value(0).toInt();
@@ -196,7 +260,6 @@ void StudentWindow::refresh() {
 				imageloader = 91;
 			}
 			QString rankAchieved = ":/new/prefix1/plaatjes/achievements/achieved/" + QString::number(imageloader) + ".png";
-			qDebug(rankAchieved.toStdString().c_str());
 			achieveList[pointylist].name = q.value(1).toString();
 			achieveList[pointylist].info = q.value(2).toString();
 			achieveList[pointylist].score = q.value(3).toString();
@@ -214,7 +277,6 @@ void StudentWindow::on_submitButton_clicked()
 	QString nummertje = q.value(0).toString();
 	int nummer = q.value(0).toInt();
 	QString alter = "UPDATE `assignment_status` SET `submitted` = 1, `solution` = '" + ui->opdrachtCode->toPlainText() + "' WHERE `assID` = " + nummertje +" AND `accID` = "+QString::number(ingelogde);
-	qDebug(alter.toStdString().c_str());
 	sqlplayer->alter(alter);
 	AchievementHandler * achieve = new AchievementHandler(ingelogde);
 	achieve->SubmitStudent(nummer,ui->opdrachtCode->toPlainText());
@@ -232,31 +294,34 @@ void StudentWindow::on_opslaanButton_clicked()
 	q.next();
 	QString nummertje = q.value(0).toString();
 	QString alter = "UPDATE `assignment_status` SET `solution` = '" + ui->opdrachtCode->toPlainText() + "' WHERE `assID` = " + nummertje +" AND `accID` = " + QString::number(ingelogde);
-	qDebug(alter.toStdString().c_str());
 	sqlplayer->alter(alter);
 	QMessageBox msgBox;
 	msgBox.setText("Opdracht Opgeslagen.");
 	msgBox.exec();
 }
 
-void StudentWindow::on_tableWidget_cellDoubleClicked(int row, int column)
+void StudentWindow::on_tableWidget_cellDoubleClicked(int row)
 {
 	ui->opslaanButton->setDisabled(false);
 	ui->submitButton->setDisabled(false);
 	QLabel *opdracht = (QLabel*) ui->tableWidget->cellWidget(row, 0);
-	opdrachtNaam = opdracht->text();
-	QString x = "SELECT `instructions`, `video` FROM `assignment_status` AS a, `assignments` AS b WHERE b.`naam` = '" + opdrachtNaam + "' AND a.`assID` = b.`assID`";
-	QString y = "SELECT a.`solution` FROM `assignment_status` AS a, `assignments` AS b WHERE b.`naam` = '" + opdrachtNaam + "' AND a.`accID` = " + QString::number(ingelogde)+ " AND a.`assID` = b.`assID`";
-	qDebug(y.toStdString().c_str());
-	SqlHandler *sqlplayer = new SqlHandler();
-	QSqlQuery q = sqlplayer->select(x);
-	q.next();
-	ui->opdrachtText->setText(q.value(0).toString());
-	ui->youtubeView->setUrl(q.value(1).toString());
+	if(opdracht != NULL) {
+		opdrachtNaam = opdracht->text();
+		QString x = "SELECT `instructions`, `video` FROM `assignment_status` AS a, `assignments` AS b WHERE b.`naam` = '" + opdrachtNaam + "' AND a.`assID` = b.`assID`";
+		QString y = "SELECT a.`solution` FROM `assignment_status` AS a, `assignments` AS b WHERE b.`naam` = '" + opdrachtNaam + "' AND a.`accID` = " + QString::number(ingelogde)+ " AND a.`assID` = b.`assID`";
+		SqlHandler *sqlplayer = new SqlHandler();
+		QSqlQuery q = sqlplayer->select(x);
+		ui->opdrachtText->setText(q.value(0).toString());
+		ui->youtubeView->setUrl(q.value(1).toString());
 
-	QSqlQuery m = sqlplayer->select(y);
-	m.next();
-	ui->opdrachtCode->setText(m.value(0).toString());
+		QSqlQuery m = sqlplayer->select(y);
+		m.next();
+		ui->opdrachtCode->setText(m.value(0).toString());
+	} else {
+		ui->opdrachtText->setText("");
+		ui->youtubeView->setUrl(QString::fromStdString(""));
+		ui->opdrachtCode->setText("");
+	}
 }
 
 void StudentWindow::on_logOutButton_clicked()
@@ -285,10 +350,9 @@ void StudentWindow::on_resetButton_clicked()
 	}
 }
 
-void StudentWindow::on_achievementList_clicked(const QModelIndex &index){}
+void StudentWindow::on_achievementList_clicked(){}
 
 void StudentWindow::on_achievementList_clickie() {
-	qDebug("Hallo2");
 	if(ui->allAchievements->isHidden()) {
 		ui->allAchievements->setRowCount(0);
 		//'andere' achievements
@@ -316,7 +380,6 @@ void StudentWindow::on_achievementList_clickie() {
 			ui->allAchievements->setCellWidget(ui->allAchievements->rowCount()-1, (i)%2, newAchievement);
 		}
 		rememberInt += i;
-		qDebug(QString::number(ui->allAchievements->rowCount()).toStdString().c_str());
 		ui->allAchievements->insertRow(ui->allAchievements->rowCount());
 		ui->allAchievements->setCellWidget(ui->allAchievements->rowCount()-1, 0, new Horizontaldingie("Secret"));
 		ui->allAchievements->setCellWidget(ui->allAchievements->rowCount()-1, 1, new Horizontaldingie());

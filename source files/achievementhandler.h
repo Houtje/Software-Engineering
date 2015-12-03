@@ -36,6 +36,20 @@ public:
 	void Flawless();
 	void TwistedAgain();
 	void SteadyFlow();
+    void Compressed(QString Parent);
+    void Follower();
+    void OneSmallStep();
+    void Followed();
+    void Watcher();
+    void Helper();
+    void SpeedyWorker();
+    void Accuracy();
+    void Agility();
+    void Catergory();
+    void EasyPeasy();
+    void MiddleOfTheRoad();
+    void MrHarder();
+    void Prankster(int accountID);
 
     //Helper functions
     int NmrCompletedAssignments();

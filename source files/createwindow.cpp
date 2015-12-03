@@ -34,11 +34,9 @@ void CreateWindow::on_createknop_clicked()
     SqlHandler *sqlplayer = new SqlHandler();
 	if(assID) {
 		QString alter = "UPDATE `assignments` SET `naam` = '" + ui->opdrachtnaam->toPlainText() + "', `instructions` = '" + ui->beschrijving->toPlainText() + "', `video` = '" + ui->ytlink->toPlainText() + "', `skeletcode` = '" + ui->skeletcode->toPlainText() + "' WHERE `assID` = " + QString::number(assID);
-		qDebug(alter.toStdString().c_str());
 		sqlplayer->alter(alter);
 	} else {
 		QString alter = "INSERT INTO Assignments (assID, naam, instructions, video, skeletcode) VALUES ('0','" + ui->opdrachtnaam->toPlainText() + "','" + ui->beschrijving->toPlainText() + "','" + ui->ytlink->toPlainText() + "','" + ui->skeletcode->toPlainText() + "')";
-		qDebug(alter.toStdString().c_str());
 		sqlplayer->alter(alter);
 
 		alter = "INSERT INTO `assignment_status`(`assID`, `accID`, `solution`) SELECT MAX(a.assID), b.accID, (SELECT `skeletcode` FROM `assignments` WHERE `assID` = (SELECT MAX(`assID`) FROM `assignments`)) \
