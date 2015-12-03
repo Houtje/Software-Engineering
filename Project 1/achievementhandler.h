@@ -27,25 +27,40 @@ public:
     AchievementHandler(int accID);
 
     //Achievements
-    BuilderAchievement();
-    TurnOffTheLights();
-    Cheater(QString Parent);
-    Twisted();
-    Achiever();
-    Scorer();
-    Flawless();
-    TwistedAgain();
-    SteadyFlow();
+	void BuilderAchievement();
+	void TurnOffTheLights();
+	void Cheater(QString Parent);
+	void Twisted();
+	void Achiever();
+	void Scorer();
+	void Flawless();
+	void TwistedAgain();
+	void SteadyFlow();
+    void Compressed(QString Parent);
+    void Follower();
+    void OneSmallStep();
+    void Followed();
+    void Watcher();
+    void Helper();
+    void SpeedyWorker();
+    void Accuracy();
+    void Agility();
+    void Catergory();
+    void EasyPeasy();
+    void MiddleOfTheRoad();
+    void MrHarder();
+    void Prankster(int accountID);
 
     //Helper functions
     int NmrCompletedAssignments();
     bool InsertAchievement(int accountID, int achievementID );
     int AllAssignments();
     int AllNormals();
+	void NewAchieve();
 
     //Submit functions
-    SubmitStudent(int assID, QString code);
-    SubmitDocent(int assID, int accID);
+	void SubmitStudent(int assID, QString code);
+	void SubmitDocent(int assID, int accID);
 };
 
 #endif // ACHIEVEMENTHANDLER_H
