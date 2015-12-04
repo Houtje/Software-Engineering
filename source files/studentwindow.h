@@ -13,6 +13,8 @@
 #include "achievementlist.h"
 #include "horizontaldingie.h"
 #include "achievementhandler.h"
+#include "ui_studentwindow.h"
+#include "QDebug"
 
 namespace Ui {
 
@@ -56,6 +58,12 @@ private:
 	QString opdrachtNaam;
 	int ingelogde;
 	bool goLogin;
+    AchievementList *achieving;
+    QHeaderView *headerView;
+    SqlHandler *sqlplayer;
+    QString message;
+    QSqlQuery query;
+    AchievementHandler * achieve;
 };
 
 #endif // STUDENTWINDOW_H

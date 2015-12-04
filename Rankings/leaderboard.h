@@ -6,7 +6,8 @@
 #include <QLabel>
 #include <QTimer>
 #include <QTime>
-
+#include "ui_leaderboard.h"
+#include "sqlhandler.h"
 
 namespace Ui {
 class leaderboard;
@@ -26,6 +27,12 @@ public slots:
 
 private:
     Ui::leaderboard *ui;
+    QTimer *timer;
+    SqlHandler * sqlplayer;
+    QString message;
+    QSqlQuery query;
+    QHeaderView * headerview;
+    QHeaderView * verticalview;
 };
 
 #endif // MAINWINDOW_H

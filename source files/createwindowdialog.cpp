@@ -14,7 +14,7 @@ CreateWindowDialog::CreateWindowDialog(int assignment, QWidget *parent) :
 
     setWindowIcon(QIcon(string));
 	if(assID) {
-        message = "SELECT `naam`,`instructions`,`video`,`skeletcode` FROM `assignments` WHERE assID = " + QString::number(assID);
+        message = "SELECT `naam`,`instructions`,`video`,`skeletcode`,`category`,`sets` FROM `assignments` WHERE assID = " + QString::number(assID);
         query = sqlplayer->select(message);
         if(query.next()){
 			setWindowTitle("Opdracht bewerken");
@@ -23,6 +23,13 @@ CreateWindowDialog::CreateWindowDialog(int assignment, QWidget *parent) :
             ui->beschrijving->setText(query.value(1).toString());
             ui->ytlink->setText(query.value(2).toString());
             ui->skeletcode->setText(query.value(3).toString());
+            ui->category->setText(query.value(4).toString());
+            if(query.value(5).toString() == "easy")
+                ui->comboBox->setCurrentIndex(0);
+            if(query.value(5).toString() == "medium")
+                ui->comboBox->setCurrentIndex(1);
+            if(query.value(5).toString() == "hard")
+                ui->comboBox->setCurrentIndex(2);
 		}
 	}
 

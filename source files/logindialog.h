@@ -4,6 +4,8 @@
 #include <QDialog>
 #include "sqlhandler.h"
 #include "registerwindows.h"
+#include "ui_logindialog.h"
+#include <QDebug>
 
 namespace Ui {
 	class LogInDialog;
@@ -27,6 +29,9 @@ private:
 	Ui::LogInDialog *ui;
 	int accountID;
 	bool docent;
+    SqlHandler *sqlplayer;
+    QString message;
+    QSqlQuery query;
 };
 
 #endif // DIALOG_H

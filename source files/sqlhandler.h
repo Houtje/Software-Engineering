@@ -5,6 +5,8 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QSqlRecord>
+#include "QDebug"
+#include "iostream"
 
 class SqlHandler
 {
@@ -30,7 +32,8 @@ public:
 
 
 private:
-
+    QString str;
+    QSqlDatabase db;
 };
 
 #endif // SqlHandler_H

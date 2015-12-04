@@ -1,7 +1,7 @@
 #include "logindialog.h"
 
 //the login screen. This is the start up screen where we can make a new user(student).
-//we can login to a student side account and a docent side account depending on the
+//we can login to a student side account and a docent side account depending on the 
 //permission of the account which is login in.
 LogInDialog::LogInDialog(QWidget *parent) :
     QDialog(parent),

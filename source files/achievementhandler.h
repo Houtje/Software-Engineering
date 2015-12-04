@@ -20,6 +20,7 @@ public:
     int allNormals;
     int assignmentID;
     int accountID;
+    int achievetracker;
 
     ///////////FUNCTIONS//////////
     //Constructors
@@ -40,11 +41,7 @@ public:
     void Follower();
     void OneSmallStep();
     void Followed();
-    void Watcher();
-    void Helper();
     void SpeedyWorker();
-    void Accuracy();
-    void Agility();
     void Catergory();
     void EasyPeasy();
     void MiddleOfTheRoad();

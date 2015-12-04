@@ -21,6 +21,8 @@ private slots:
 
 private:
 	Ui::RegisterWindows *ui;
+    SqlHandler * sqlplayer;
+    QString message;
 };
 
 #endif // REGISTERWINDOWS_H

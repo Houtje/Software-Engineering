@@ -8,6 +8,10 @@
 #include <QLabel>
 #include "qrocheckbox.h"
 #include "achievementhandler.h"
+#include "docentassignmentswindow.h"
+#include "ui_docentwindow.h"
+#include "sqlhandler.h"
+
 
 namespace Ui {
 class DocentWindow;
@@ -39,6 +43,10 @@ private:
 	Ui::DocentWindow *ui;
 	QString opdrachtNaam;
 	QString opdrachtMaker;
+    SqlHandler *sqlplayer;
+    AchievementHandler *achieve;
+    QString message;
+    QSqlQuery query;
 	int opdrachtRij;
 	bool goLogin;
 };

@@ -1,25 +1,32 @@
 #include "docentassignmentswindow.h"
 #include "ui_docentassignmentswindow.h"
 
+//the DocentAssignmentsWindow has as purpose that it makes it possible
+//for a docent to make a new, alter or delete an assignment.
 DocentAssignmentsWindow::DocentAssignmentsWindow(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DocentAssignmentsWindow)
 {
 	ui->setupUi(this);
 
-    QString string = ":/new/prefix1/plaatjes/golden_cup.png";
-    setWindowIcon(QIcon(string));
+    //Declaration
+    QString string = ":/new/prefix1/plaatjes/icon.png";
+    row = 0;
+    QHeaderView *headerView = new QHeaderView(Qt::Horizontal, ui->tableWidget);
+    sqlplayer = new SqlHandler();
 
-	row = 0;
-	QHeaderView *headerView = new QHeaderView(Qt::Horizontal, ui->tableWidget);
+
+    setWindowIcon(QIcon(string));
 	ui->tableWidget->setHorizontalHeader(headerView);
 	headerView->setSectionResizeMode(0, QHeaderView::Stretch);
-	SqlHandler *sqlplayer = new SqlHandler();
-	QSqlQuery q = sqlplayer->select("SELECT `naam` FROM `assignments` ORDER BY `assID` DESC");
-	while(q.next()) {
+
+    message = "SELECT `naam` FROM `assignments` ORDER BY `assID` DESC";
+    query = sqlplayer->select(message);
+    while(query.next()) {
 		ui->tableWidget->insertRow(ui->tableWidget->rowCount());
-		ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 0, new QLabel(q.value(0).toString()));
+        ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 0, new QLabel(query.value(0).toString()));
 	}
+
 	QStringList strings = QStringList();
 	strings.append("Naam");
 	ui->tableWidget->setHorizontalHeaderLabels(strings);
@@ -31,24 +38,26 @@ DocentAssignmentsWindow::~DocentAssignmentsWindow()
 	delete ui;
 }
 
+//if their is an assignment selected the changes that are made to the assignment
+//are saved and send to the database.
 void DocentAssignmentsWindow::on_changeButton_clicked()
 {
 	QModelIndexList dinges = ui->tableWidget->selectionModel()->selectedRows();
 	if(dinges.length() != 0) {
 		row = dinges.at(0).row();
 		QLabel *label = (QLabel*) ui->tableWidget->cellWidget(row, 0);
-		SqlHandler *sqlplayer = new SqlHandler();
-		QString query = "SELECT `assID` FROM `assignments` WHERE `naam` = '" + label->text() + "'";
-		QSqlQuery q = sqlplayer->select(query);
-		q.next();
-		int assignment = q.value(0).toInt();
+        message = "SELECT `assID` FROM `assignments` WHERE `naam` = '" + label->text() + "'";
+        query = sqlplayer->select(message);
+        query.next();
+        int assignment = query.value(0).toInt();
 		cw = new CreateWindowDialog(assignment);
 		cw->exec();
 		ui->tableWidget->setRowCount(0);
-		q = sqlplayer->select("SELECT `naam` FROM `assignments` ORDER BY `assID` DESC");
-		while(q.next()) {
+        message = "SELECT `naam` FROM `assignments` ORDER BY `assID` DESC";
+        query = sqlplayer->select(message);
+        while(query.next()) {
 			ui->tableWidget->insertRow(ui->tableWidget->rowCount());
-			ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 0, new QLabel(q.value(0).toString()));
+            ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 0, new QLabel(query.value(0).toString()));
 		}
 		QStringList strings = QStringList();
 		strings.append("Naam");
@@ -61,16 +70,18 @@ void DocentAssignmentsWindow::on_changeButton_clicked()
 	}
 }
 
+//this button makes a new window the createwindowdialog which is capable of making a new
+//assignment for the students.
 void DocentAssignmentsWindow::on_addButton_clicked()
 {
 	cw = new CreateWindowDialog(0, this);
 	cw->exec();
 	ui->tableWidget->setRowCount(0);
-	SqlHandler *sqlplayer = new SqlHandler();
-	QSqlQuery q = sqlplayer->select("SELECT `naam` FROM `assignments` ORDER BY `assID` DESC");
-	while(q.next()) {
+    message = "SELECT `naam` FROM `assignments` ORDER BY `assID` DESC";
+    query = sqlplayer->select(message);
+    while(query.next()) {
 		ui->tableWidget->insertRow(ui->tableWidget->rowCount());
-		ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 0, new QLabel(q.value(0).toString()));
+        ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 0, new QLabel(query.value(0).toString()));
 	}
 	QStringList strings = QStringList();
 	strings.append("Naam");
@@ -78,21 +89,21 @@ void DocentAssignmentsWindow::on_addButton_clicked()
 	ui->tableWidget->horizontalHeaderItem(0)->setTextAlignment(Qt::AlignLeft);
 }
 
+//if their is an assignment selected the selected assignment is deleted from the database.
 void DocentAssignmentsWindow::on_removeButton_clicked()
 {
 	QModelIndexList dinges = ui->tableWidget->selectionModel()->selectedRows();
 	if(dinges.length() != 0) {
 		row = dinges.at(0).row();
 		QLabel *label = (QLabel*) ui->tableWidget->cellWidget(row, 0);
-		SqlHandler *sqlplayer = new SqlHandler();
-		QString query = "SELECT `assID` FROM `assignments` WHERE `naam` = '" + label->text() + "'";
-		QSqlQuery q = sqlplayer->select(query);
-		q.next();
-		int assignment = q.value(0).toInt();
-		query = "DELETE FROM `assignments` WHERE `assID` = " + QString::number(assignment) ;
-		sqlplayer->alter(query);
-		query = "DELETE FROM `assignment_status` WHERE `assID` = " + QString::number(assignment) ;
-		sqlplayer->alter(query);
+        message = "SELECT `assID` FROM `assignments` WHERE `naam` = '" + label->text() + "'";
+        query = sqlplayer->select(message);
+        query.next();
+        int assignment = query.value(0).toInt();
+        message = "DELETE FROM `assignments` WHERE `assID` = " + QString::number(assignment) ;
+        sqlplayer->alter(message);
+        message = "DELETE FROM `assignment_status` WHERE `assID` = " + QString::number(assignment) ;
+        sqlplayer->alter(message);
         ui->tableWidget->removeRow(row);
 	}
 }
