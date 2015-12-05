@@ -510,30 +510,10 @@
    <string>Docent Scherm</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="accountBeheerButton">
-    <property name="geometry">
-     <rect>
-      <x>360</x>
-      <y>620</y>
-      <width>111</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Arial</family>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Account 
- Beheer</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="opdrachtBeheerButton">
     <property name="geometry">
      <rect>
-      <x>490</x>
+      <x>360</x>
       <y>620</y>
       <width>111</width>
       <height>51</height>
@@ -861,7 +841,7 @@
      <rect>
       <x>360</x>
       <y>570</y>
-      <width>536</width>
+      <width>501</width>
       <height>42</height>
      </rect>
     </property>

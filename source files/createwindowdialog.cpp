@@ -50,7 +50,7 @@ void CreateWindowDialog::on_createknop_clicked(){
     }
     //else we want to make a new assignment
     else {
-		message = "INSERT INTO Assignments (assID, naam, instructions, video, skeletcode, category, sets) VALUES ('0','" + ui->opdrachtnaam->text() + "','" + ui->beschrijving->toPlainText() + "','" + ui->ytlink->text() + "','" + ui->skeletcode->toPlainText() + "','" + ui->category->text() + "','" + ui->comboBox->itemText(ui->comboBox->currentIndex()) + "')";
+		message = "INSERT INTO `assignments`(assID, naam, instructions, video, skeletcode, category, sets) VALUES ('0','" + ui->opdrachtnaam->text() + "','" + ui->beschrijving->toPlainText() + "','" + ui->ytlink->text() + "','" + ui->skeletcode->toPlainText() + "','" + ui->category->text() + "','" + ui->comboBox->itemText(ui->comboBox->currentIndex()) + "')";
         sqlplayer->alter(message);
 
         message = "INSERT INTO `assignment_status`(`assID`, `accID`, `solution`) SELECT MAX(a.assID), b.accID, (SELECT `skeletcode` FROM `assignments` WHERE `assID` = (SELECT MAX(`assID`) FROM `assignments`)) \

@@ -44,7 +44,34 @@ void DocentWindow::on_opdrachtBeheerButton_clicked()
 }
 
 void DocentWindow::on_compileButton_clicked()
-{
+{	QFile Compile("hello1.cs");
+	Compile.open(QIODevice::WriteOnly);
+	QTextStream out(&Compile);
+	out << (ui->opdrachtCode->toPlainText());
+	out.flush(); //wait until write is done.
+	Compile.close();
+	QString CompilerLocation="C:/Windows/Microsoft.NET/Framework/v4.0.30319/csc.exe";
+	//TODO: allow the user to select a compiler.
+
+	QStringList CompilerArgs;
+	CompilerArgs.append("hello1.cs");
+	//Tested with the first example at https://msdn.microsoft.com/en-us/library/aa288463%28v=vs.71%29.aspx?f=255&MSPPError=-2147217396
+
+	QProcess *Compiler = new QProcess();
+	Compiler->start(CompilerLocation, CompilerArgs);
+	Compiler->waitForFinished(5000); //give the compiler at most 5 seconds (for now)
+
+	if(Compiler->exitStatus()==0&&Compiler->exitCode()==0){
+		QProcess *TestProgram = new QProcess();
+		TestProgram->start("./hello1.exe");
+		TestProgram->waitForFinished(5000); //give the program at most 5 seconds (for now)
+		QByteArray result=TestProgram->readAll();
+		ui->opdrachtTerminal->setText(result);
+	}
+	else {
+		QByteArray compileError=Compiler->readAll();
+		ui->opdrachtTerminal->setText(compileError);
+	}
 
 }
 
@@ -71,6 +98,7 @@ void DocentWindow::on_submitButton_clicked(){
 	ui->checkboxOverig->setChecked(false);
 	ui->opdrachtCode->setText("");
 	ui->opdrachtText->setText("");
+	ui->opdrachtTerminal->setText("");
 	ui->compileButton->setDisabled(true);
 	ui->submitButton->setDisabled(true);
     ui->funnyButton->setDisabled(true);
@@ -105,6 +133,7 @@ void DocentWindow::on_tableWidget_cellDoubleClicked(int row)
     query = sqlplayer->select(message);
     query.next();
     ui->opdrachtCode->setText(query.value(0).toString());
+	ui->opdrachtTerminal->setText("");
 }
 
 //refresh the list of sumbitted students assignments.

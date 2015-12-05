@@ -327,13 +327,11 @@ void AchievementHandler::SpeedyWorker(){
     query.first();
     int x = query.value(0).toInt();
     for(int i = 1; i < x; i++){
-        //Level 1 t/m 3
-        //2,3 opdrachten goed ingeleverd in 10 minuten
-        if(i > 1){
-            if(InsertAchievement(accountID,15 + i )){
-                NewAchieve();
-            }
-        }
+		//Level 1 t/m 2
+		//2,3 opdrachten goed ingeleverd in 10 minuten
+		if(InsertAchievement(accountID,15 + i )){
+			NewAchieve();
+		}
         //Level 3 t/m 5
         //4,5,6 opdrachten goed ingeleverd in 10 minuten
         if(i > 2){
@@ -361,7 +359,7 @@ void AchievementHandler::Catergory(){
         }
     }
     for(int y = 0; y < x / (pow(2,y)); y++){
-        if(InsertAchievement(accountID, 20 + y )){
+		if(InsertAchievement(accountID, 21 + y )){
             NewAchieve();
         }
     }
@@ -383,7 +381,7 @@ void AchievementHandler::EasyPeasy(){
         }
     }
     for(int y = 0; y < x / (pow(2,y)); y++){
-        if(InsertAchievement(accountID, 25 + y )){
+		if(InsertAchievement(accountID, 26 + y )){
             NewAchieve();
         }
     }

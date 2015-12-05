@@ -61,7 +61,7 @@ StudentWindow::StudentWindow(int accID, QWidget *parent) :
 	allAchievementListSize = 0;
     query.first();
     allAchievementListSize = query.value(0).toInt() + 1;
-	achieveList = new Ui::AchievementInfo [allAchievementListSize];
+	achieveList = new Ui::AchievementInfo[allAchievementListSize];
     message = "SELECT `username` FROM `accounts` WHERE `accID` = " + QString::number(accID);
     query = sqlplayer->select(message);
     if(query.next()) {
@@ -114,7 +114,7 @@ StudentWindow::~StudentWindow()
 //the code is sent to a compiler to compile and gives back the output
 void StudentWindow::on_compileButton_clicked()
 {
-	QFile Compile("hello1.cs");
+	QFile Compile("temp.cs");
 	Compile.open(QIODevice::WriteOnly);
 	QTextStream out(&Compile);
 	out << (ui->opdrachtCode->toPlainText());
@@ -124,7 +124,7 @@ void StudentWindow::on_compileButton_clicked()
 	//TODO: allow the user to select a compiler.
 
 	QStringList CompilerArgs;
-	CompilerArgs.append("hello1.cs");
+	CompilerArgs.append("temp.cs");
 	//Tested with the first example at https://msdn.microsoft.com/en-us/library/aa288463%28v=vs.71%29.aspx?f=255&MSPPError=-2147217396
 
 	QProcess *Compiler = new QProcess();
@@ -133,7 +133,7 @@ void StudentWindow::on_compileButton_clicked()
 
 	if(Compiler->exitStatus()==0&&Compiler->exitCode()==0){
 		QProcess *TestProgram = new QProcess();
-		TestProgram->start("./hello1.exe");
+		TestProgram->start("./temp.exe");
 		TestProgram->waitForFinished(5000); //give the program at most 5 seconds (for now)
 		QByteArray result=TestProgram->readAll();
 		ui->opdrachtTerminal->setText(result);
@@ -235,7 +235,7 @@ void StudentWindow::refresh() {
 			}
 		}
 		ui->achievementList->clear();
-        message = "SELECT `achID` FROM `achievements` WHERE `accID` = " + QString::number(ingelogde);
+		message = "SELECT `achID` FROM `achievements` WHERE `accID` = " + QString::number(ingelogde) + " ORDER BY `time` DESC";
         query = sqlplayer->select(message);
         while(query.next()) {
             int achievementNumber = query.value(0).toInt();
@@ -315,10 +315,13 @@ void StudentWindow::on_tableWidget_cellDoubleClicked(int row)
 	QLabel *opdracht = (QLabel*) ui->tableWidget->cellWidget(row, 0);
 	if(opdracht != NULL) {
 		opdrachtNaam = opdracht->text();
-        message = "SELECT `instructions`, `video` FROM `assignment_status` AS a, `assignments` AS b WHERE b.`naam` = '" + opdrachtNaam + "' AND a.`assID` = b.`assID`";
-        query = sqlplayer->select(message);
+		message = "SELECT `instructions`, `video`, `category` FROM `assignment_status` AS a, `assignments` AS b WHERE b.`naam` = '" + opdrachtNaam + "' AND a.`assID` = b.`assID`";
+		qDebug(message.toStdString().c_str());
+		query = sqlplayer->select(message);
+		query.first();
         ui->opdrachtText->setText(query.value(0).toString());
-        ui->youtubeView->setUrl(query.value(1).toString());
+		ui->youtubeView->load(QUrl(query.value(1).toString()));
+		ui->categoryTextEdit->setText(query.value(2).toString());
 
         message = "SELECT a.`solution` FROM `assignment_status` AS a, `assignments` AS b WHERE b.`naam` = '" + opdrachtNaam + "' AND a.`accID` = " + QString::number(ingelogde)+ " AND a.`assID` = b.`assID`";
         query = sqlplayer->select(message);

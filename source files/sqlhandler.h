@@ -32,8 +32,7 @@ public:
 
 
 private:
-    QString str;
-    QSqlDatabase db;
+	QString str;
 };
 
 #endif // SqlHandler_H
