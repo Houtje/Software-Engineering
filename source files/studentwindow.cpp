@@ -150,9 +150,17 @@ void StudentWindow::refresh() {
 	if(sqlplayer != NULL) {
 		message = "SELECT DISTINCT `category` FROM `assignments`";
 		QSqlQuery categories = sqlplayer->select(message);
+		qDebug(QString::number(categories.size()).toStdString().c_str());
+		QString helper[categories.size()];
+		int i = 0;
 		while(categories.next()) {
+			helper[i] = categories.value(0).toString();
+			i++;
+		}
+		for(int y = 0; y < i; y++) {
+			qDebug(helper[y].toStdString().c_str());
 			ui->tableWidget->insertRow(ui->tableWidget->rowCount());
-			QTableWidgetItem *item = new QTableWidgetItem(categories.value(0).toString());
+			QTableWidgetItem *item = new QTableWidgetItem(helper[y]);
 			item->setFlags(item->flags() ^ Qt::ItemIsEditable);
 			QFont fonty;
 			fonty.setBold(true);
@@ -167,7 +175,7 @@ void StudentWindow::refresh() {
 			ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 3, new QTableWidgetItem(*item));
 			ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 4, new QTableWidgetItem(*item));
 			delete item;
-			message ="SELECT a.`naam`, b.`score` FROM `assignments` AS a, `assignment_status` AS b WHERE a.`assID` = b.`assID` AND b.`accID` = " + QString::number(ingelogde) + " AND a.`category` = '" + categories.value(0).toString() + "' ORDER BY a.`assID` ASC";
+			message ="SELECT a.`naam`, b.`score` FROM `assignments` AS a, `assignment_status` AS b WHERE a.`assID` = b.`assID` AND b.`accID` = " + QString::number(ingelogde) + " AND a.`category` = '" + helper[y] + "' ORDER BY a.`assID` ASC";
 			query = sqlplayer->select(message);
 			while(query.next()) {
 				ui->tableWidget->insertRow(ui->tableWidget->rowCount());
