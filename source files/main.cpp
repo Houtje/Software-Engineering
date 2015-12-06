@@ -3,6 +3,8 @@
 #include "docentwindow.h"
 #include <QApplication>
 
+//Main function for the code. It opens the login window, and when the log in button is clicked
+//returns here to login with the credentials to the right program (teacher or student side)
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);

@@ -1,6 +1,7 @@
 #include "qrocheckbox.h"
 
-//ReadOnlyCheckBox for in the list of students assignments the score indicators.
+//ReadOnlyCheckBox used in the list of assignments the students can see.
+//It's the same as a regular checkbox but can't be clicked and has a different style.
 QROCheckBox::QROCheckBox(QString string, bool tested, QWidget *parent) : QCheckBox(string, parent) {
 	setText(string);
 	setChecked(tested);

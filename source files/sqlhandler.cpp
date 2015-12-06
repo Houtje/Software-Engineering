@@ -17,8 +17,8 @@ QSqlDatabase SqlHandler::connect(){
 	return db;
 }
 
-//the general function for an select statement to the database.
-//general this function gives back an query of results in the form
+//the general function for a select statement to the database.
+// this function gives back an query of results in the form
 //of a table.
 QSqlQuery SqlHandler::select(QString str){
 	QSqlDatabase db = connect();
@@ -38,8 +38,7 @@ QSqlQuery SqlHandler::select(QString str){
 }
 
 //the general function for an alter statement to the database.
-//the gernal function giving no result back. Only makes changes in
-//the database.
+//the function returns nothing. It changes the content of the database.
 void SqlHandler::alter(QString str ){
     QSqlDatabase db = connect();
     if(db.open()){

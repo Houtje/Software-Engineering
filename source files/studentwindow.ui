@@ -1726,7 +1726,7 @@
      </rect>
     </property>
     <property name="placeholderText">
-     <string>Category</string>
+     <string>Moeilijkheids graad</string>
     </property>
    </widget>
   </widget>

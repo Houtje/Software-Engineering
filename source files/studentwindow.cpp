@@ -1,15 +1,15 @@
 #include "studentwindow.h"
 
-//the main studentwindow where the student can see his assignments and how they are
-//graded. Also the possibility to open up a assignment bij double clicking on it, when
-//the student does, sees the selected assignment. Their is also an his code enviroment.
-//By selecting an assignment their is sometimes given an skeletcode. And that can be retrieved
-//with the reset button the code of the student is forgotten and the skeletcode is given to
-//the student. With the save button the student can save his code to pick up later on.
-//With the sumbit button the student send his code to the docent to rate his code.
+//the main studentwindow is where the student can see his assignments and how they are
+//graded. It also is where the student can open up an assignment with double clicking on it.
+//This opens the assignment where the student can see info about the assignment and enter his code.
+//An assignment possibly has an skeletcode, which is a default code for the assingment.
+//The code can be reset with the reset button which puts it back to the skeletoncode.
+//With the save button the student can save his code to continue later on.
+//With the sumbit button the student send his code to the teacher to rate his code.
 //With the compile button the student compiles his code with output send back to the
 //terminal window.
-//In this window also the student can track his last achieved achievements and his overall
+//In this window the student can also track his last achieved achievements and his overall
 //progress of getting achievements.
 StudentWindow::StudentWindow(int accID, QWidget *parent) :
     QMainWindow(parent),
@@ -103,7 +103,7 @@ StudentWindow::StudentWindow(int accID, QWidget *parent) :
 	this->refresh();
 	QTimer *timer = new QTimer(this);
 	connect(timer, SIGNAL(timeout()), this, SLOT(refresh()));
-	timer->start(15000);
+	timer->start(5000);
 }
 
 StudentWindow::~StudentWindow()
@@ -111,7 +111,7 @@ StudentWindow::~StudentWindow()
 	delete ui;
 }
 
-//the code is sent to a compiler to compile and gives back the output
+//the code is sent to a compiler and ran afterwards. The output is displayed in the terminal.
 void StudentWindow::on_compileButton_clicked()
 {
 	QFile Compile("temp.cs");
@@ -148,94 +148,42 @@ void StudentWindow::on_compileButton_clicked()
 void StudentWindow::refresh() {
 	ui->tableWidget->setRowCount(0);
 	if(sqlplayer != NULL) {
-		ui->tableWidget->insertRow(ui->tableWidget->rowCount());
-		QTableWidgetItem *item = new QTableWidgetItem("easy");
-		item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-		QFont fonty;
-		fonty.setBold(true);
-		item->setFont(fonty);
-		item->setBackgroundColor(Qt::gray);
-		ui->tableWidget->setItem(ui->tableWidget->rowCount()-1,0, item);
-		item = new QTableWidgetItem();
-		item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-		item->setBackgroundColor(Qt::gray);
-		ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 1, new QTableWidgetItem(*item));
-		ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 2, new QTableWidgetItem(*item));
-		ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 3, new QTableWidgetItem(*item));
-		ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 4, new QTableWidgetItem(*item));
-		delete item;
-        message ="SELECT a.`naam`, b.`score` FROM `assignments` AS a, `assignment_status` AS b WHERE a.`assID` = b.`assID` AND b.`accID` = " + QString::number(ingelogde) + " AND a.`sets` = 'easy' ORDER BY a.`assID` ASC";
-        query = sqlplayer->select(message);
-        while(query.next()) {
+		message = "SELECT DISTINCT `category` FROM `assignments`";
+		QSqlQuery categories = sqlplayer->select(message);
+		while(categories.next()) {
 			ui->tableWidget->insertRow(ui->tableWidget->rowCount());
-            ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 0, new QLabel(query.value(0).toString()));
-			ui->tableWidget->cellWidget(ui->tableWidget->rowCount()-1, 0)->setContentsMargins(5, 0, 0, 0);
-            if(query.value(1).toString().compare("")){
-                ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 1, new QROCheckBox("", (query.value(1).toInt() / 1000) & 1));
-                ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 2, new QROCheckBox("", (query.value(1).toInt() / 100) & 1));
-                ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 3, new QROCheckBox("", (query.value(1).toInt() / 10) & 1));
-                ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 4, new QROCheckBox("", (query.value(1).toInt() & 1)));
+			QTableWidgetItem *item = new QTableWidgetItem(categories.value(0).toString());
+			item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+			QFont fonty;
+			fonty.setBold(true);
+			item->setFont(fonty);
+			item->setBackgroundColor(Qt::gray);
+			ui->tableWidget->setItem(ui->tableWidget->rowCount()-1,0, item);
+			item = new QTableWidgetItem();
+			item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+			item->setBackgroundColor(Qt::gray);
+			ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 1, new QTableWidgetItem(*item));
+			ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 2, new QTableWidgetItem(*item));
+			ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 3, new QTableWidgetItem(*item));
+			ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 4, new QTableWidgetItem(*item));
+			delete item;
+			message ="SELECT a.`naam`, b.`score` FROM `assignments` AS a, `assignment_status` AS b WHERE a.`assID` = b.`assID` AND b.`accID` = " + QString::number(ingelogde) + " AND a.`category` = '" + categories.value(0).toString() + "' ORDER BY a.`assID` ASC";
+			query = sqlplayer->select(message);
+			while(query.next()) {
+				ui->tableWidget->insertRow(ui->tableWidget->rowCount());
+				ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 0, new QLabel(query.value(0).toString()));
+				ui->tableWidget->cellWidget(ui->tableWidget->rowCount()-1, 0)->setContentsMargins(5, 0, 0, 0);
+				if(query.value(1).toString().compare("")){
+					ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 1, new QROCheckBox("", (query.value(1).toInt() / 1000) & 1));
+					ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 2, new QROCheckBox("", (query.value(1).toInt() / 100) & 1));
+					ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 3, new QROCheckBox("", (query.value(1).toInt() / 10) & 1));
+					ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 4, new QROCheckBox("", (query.value(1).toInt() & 1)));
 
-			}
-		}
-		ui->tableWidget->insertRow(ui->tableWidget->rowCount());
-		item = new QTableWidgetItem("medium");
-		item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-		item->setFont(fonty);
-		item->setBackgroundColor(Qt::gray);
-		ui->tableWidget->setItem(ui->tableWidget->rowCount()-1,0, item);
-		item = new QTableWidgetItem();
-		item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-		item->setBackgroundColor(Qt::gray);
-		ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 1, new QTableWidgetItem(*item));
-		ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 2, new QTableWidgetItem(*item));
-		ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 3, new QTableWidgetItem(*item));
-		ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 4, new QTableWidgetItem(*item));
-		delete item;
-        message ="SELECT a.`naam`, b.`score` FROM `assignments` AS a, `assignment_status` AS b WHERE a.`assID` = b.`assID` AND b.`accID` = " + QString::number(ingelogde) + " AND a.`sets` = 'medium' ORDER BY a.`assID` ASC";
-        query = sqlplayer->select(message);
-        while(query.next()) {
-			ui->tableWidget->insertRow(ui->tableWidget->rowCount());
-            ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 0, new QLabel(query.value(0).toString()));
-			ui->tableWidget->cellWidget(ui->tableWidget->rowCount()-1, 0)->setContentsMargins(5, 0, 0, 0);
-            if(query.value(1).toString().compare("")){
-                ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 1, new QROCheckBox("", (query.value(1).toInt() / 1000) & 1));
-                ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 2, new QROCheckBox("", (query.value(1).toInt() / 100) & 1));
-                ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 3, new QROCheckBox("", (query.value(1).toInt() / 10) & 1));
-                ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 4, new QROCheckBox("", (query.value(1).toInt() & 1)));
-
-			}
-		}
-		ui->tableWidget->insertRow(ui->tableWidget->rowCount());
-		item = new QTableWidgetItem("hard");
-		item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-		item->setFont(fonty);
-		item->setBackgroundColor(Qt::gray);
-		ui->tableWidget->setItem(ui->tableWidget->rowCount()-1,0, item);
-		item = new QTableWidgetItem();
-		item->setFlags(item->flags() ^ Qt::ItemIsEditable);
-		item->setBackgroundColor(Qt::gray);
-		ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 1, new QTableWidgetItem(*item));
-		ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 2, new QTableWidgetItem(*item));
-		ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 3, new QTableWidgetItem(*item));
-		ui->tableWidget->setItem(ui->tableWidget->rowCount()-1, 4, new QTableWidgetItem(*item));
-		delete item;
-        message = "SELECT a.`naam`, b.`score` FROM `assignments` AS a, `assignment_status` AS b WHERE a.`assID` = b.`assID` AND b.`accID` = " + QString::number(ingelogde) + " AND a.`sets` = 'hard' ORDER BY a.`assID` ASC";
-        query = sqlplayer->select(message);
-        while(query.next()) {
-			ui->tableWidget->insertRow(ui->tableWidget->rowCount());
-            ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 0, new QLabel(query.value(0).toString()));
-			ui->tableWidget->cellWidget(ui->tableWidget->rowCount()-1, 0)->setContentsMargins(5, 0, 0, 0);
-            if(query.value(1).toString().compare("")){
-                ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 1, new QROCheckBox("", (query.value(1).toInt() / 1000) & 1));
-                ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 2, new QROCheckBox("", (query.value(1).toInt() / 100) & 1));
-                ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 3, new QROCheckBox("", (query.value(1).toInt() / 10) & 1));
-                ui->tableWidget->setCellWidget(ui->tableWidget->rowCount()-1, 4, new QROCheckBox("", (query.value(1).toInt() & 1)));
-
+				}
 			}
 		}
 		ui->achievementList->clear();
-		message = "SELECT `achID` FROM `achievements` WHERE `accID` = " + QString::number(ingelogde) + " ORDER BY `time` DESC";
+		message = "SELECT a.`achID`,b.`name` FROM `achievements` AS a, `achievement_list` AS b WHERE a.`accID` = " + QString::number(ingelogde) + " AND a.`achID` = b.`achID` ORDER BY `time` DESC";
         query = sqlplayer->select(message);
         while(query.next()) {
             int achievementNumber = query.value(0).toInt();
@@ -244,6 +192,7 @@ void StudentWindow::refresh() {
 			ui->achievementList->setResizeMode(QListView::Adjust);
 			newItem->setIcon(achievementItem);
 			newItem->setSizeHint(achievementItem.actualSize(QSize(100, 50)));
+			newItem->setToolTip(query.value(1).toString());
 			ui->achievementList->addItem(newItem);
 		}
 		QStringList headers = QStringList();
@@ -279,7 +228,7 @@ void StudentWindow::refresh() {
 	}
 }
 
-//submits the code to the docent and saves the code in the database.
+//submits the code to the teacher and saves the code in the database.
 void StudentWindow::on_submitButton_clicked(){
     message = "SELECT `assID` FROM `assignments` WHERE `naam` = '" + opdrachtNaam + "'";
     query = sqlplayer->select(message);
@@ -315,7 +264,7 @@ void StudentWindow::on_tableWidget_cellDoubleClicked(int row)
 	QLabel *opdracht = (QLabel*) ui->tableWidget->cellWidget(row, 0);
 	if(opdracht != NULL) {
 		opdrachtNaam = opdracht->text();
-		message = "SELECT `instructions`, `video`, `category` FROM `assignment_status` AS a, `assignments` AS b WHERE b.`naam` = '" + opdrachtNaam + "' AND a.`assID` = b.`assID`";
+		message = "SELECT `instructions`, `video`, `sets` FROM `assignment_status` AS a, `assignments` AS b WHERE b.`naam` = '" + opdrachtNaam + "' AND a.`assID` = b.`assID`";
 		qDebug(message.toStdString().c_str());
 		query = sqlplayer->select(message);
 		query.first();
@@ -341,14 +290,14 @@ void StudentWindow::on_logOutButton_clicked()
 	this->close();
 }
 
-//preventing this window to shutdown when opening an other window.
+//function for logindialog to see if it has to keep going or shutdown.
 bool StudentWindow::keepGoing() {
 	bool tempLogin = goLogin;
 	goLogin = false;
 	return tempLogin;
 }
 
-//resetting the code in the code text to the original skeletcode
+//resetting the code to the skeleton code
 void StudentWindow::on_resetButton_clicked()
 {
     message = "SELECT `skeletcode` FROM `assignments` WHERE `naam` = '" + opdrachtNaam + "'";
@@ -364,7 +313,7 @@ void StudentWindow::on_resetButton_clicked()
 
 void StudentWindow::on_achievementList_clicked(){}
 
-//opens up the all progress achievement list
+//opens up the all achievement list
 void StudentWindow::on_achievementList_clickie() {
     Form *newAchievement ;
     if(ui->allAchievements->isHidden()) {

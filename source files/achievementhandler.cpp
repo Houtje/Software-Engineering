@@ -3,7 +3,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //The Constructors
-//The constructor for and student side achievement handler
+//The constructor for the student side achievement handler
 AchievementHandler::AchievementHandler(int accID){
     sqlplayer = new SqlHandler();
     accountID = accID;
@@ -82,7 +82,7 @@ void AchievementHandler::Cheater(QString Parent){
 }
 
 //the TurnOffTheLights achievement (StudentSide)
-//looks if the moment you submit if your within the work hours or out.
+//looks if the moment you submitted the assignment is within the work hours.
 //Workhours 06:00 - 24:00.
 void AchievementHandler::TurnOffTheLights(){
     message = "SELECT MAX(`timestamp`) FROM `assignment_status` WHERE `accID` = " + QString::number(accountID);
@@ -99,7 +99,7 @@ void AchievementHandler::TurnOffTheLights(){
 }
 
 // the twisted achievement (StudentSide)
-// looks if their is an achievement which is in a earlier priority
+// looks if their is an achievement which has an earlier priority
 void AchievementHandler::Twisted(){
      message = "SELECT EXISTS(SELECT `assID` FROM `assignment_status` WHERE `assID` < "+ QString::number(assignmentID) + " AND `accID` = " + QString::number(accountID) + " AND `score` = '')";
      query = sqlplayer->select(message);
@@ -154,8 +154,8 @@ void AchievementHandler::Achiever(){
 
 
 //the scorer achievement (StudentSide)(DocentSide)
-//every time there is a possibilty to get a achievement this function is called.
-//if an certain amount of points is achieved get a lvl in this achievement.
+//every time there is a possibilty to get an achievement this function is called.
+//if a certain amount of points is achieved you get a lvl in this achievement.
 void AchievementHandler::Scorer(){
    message = "SELECT SUM(A.score) FROM `achievement_list` as A  JOIN `achievements` as B ON A.achID = B.achID WHERE B.accID = " + accountID;
    query = sqlplayer->select(message);
@@ -263,7 +263,7 @@ void AchievementHandler::TwistedAgain(){
 }
 
 //the steady flow achievement (DocentSide)
-//if an steady flow of good assignments have been delivered and rated as good by the docent
+//if a steady flow of good assignments has been delivered and rated as good by the docent
 void AchievementHandler::SteadyFlow(){
 
     message = "SELECT COUNT(`timestamp`) FROM `assignment_status` WHERE (SELECT (`timestamp` -10000 ) FROM `assignment_status` WHERE `assID` = 1 AND `accID` = 2) < `timestamp` AND (SELECT `timestamp` FROM `assignment_status` WHERE `assID` = 1 AND `accID` = 2) >= `timestamp` AND `accID` = 2";
@@ -343,7 +343,7 @@ void AchievementHandler::SpeedyWorker(){
 }
 
 //the Catergory collector achievement(docentside)
-//if an all assignments in a catergory is made and rated as good by the docent.
+//get an achievement if all assignments in a catergory are made and rated as good by the docent.
 void AchievementHandler::Catergory(){
     message = "SELECT DISTINCT(`category`) FROM `assignments`";
     QSqlQuery q = sqlplayer->select(message);
@@ -365,7 +365,7 @@ void AchievementHandler::Catergory(){
     }
 }
 //the easy peasy achievement(docentside)
-//if all easy assignments in a category is made and rate as good by the docent
+//if all easy assignments in a category are made and rated as good by the docent
 void AchievementHandler::EasyPeasy(){
     message = "SELECT DISTINCT(`category`) FROM `assignments`";
     QSqlQuery q = sqlplayer->select(message);
@@ -387,7 +387,7 @@ void AchievementHandler::EasyPeasy(){
     }
 }
 //the middleoftheroad achievement(docentside)
-//if all medium assignments in a category is made and rate as good by the docent
+//if all medium assignments in a category are made and rated as good by the docent
 void AchievementHandler::MiddleOfTheRoad(){
     message = "SELECT DISTINCT(`category`) FROM `assignments`";
     QSqlQuery q = sqlplayer->select(message);
@@ -409,7 +409,7 @@ void AchievementHandler::MiddleOfTheRoad(){
     }
 }
 //the MrHarder achievement(docentside)
-//if all hard assignments in a category is made and rate as good by the docent
+//if all hard assignments in a category are made and rated as good by the docent
 void AchievementHandler::MrHarder(){
     message = "SELECT DISTINCT(`category`) FROM `assignments`";
     QSqlQuery q = sqlplayer->select(message);
@@ -438,7 +438,7 @@ void AchievementHandler::Prankster(int accountID){
     }
 }
 //the onesmallstep achievement(docentside)
-//the student has handed in a assignment as first and the docent rated it as good.
+//the student has handed in an assignment as first and the docent rated it as good.
 void AchievementHandler::OneSmallStep(){
     message = "SELECT COUNT(`accID`) FROM `assignment_status` WHERE `assID` = 2 AND `score` = 1111";
     query = sqlplayer->select(message);
@@ -450,8 +450,8 @@ void AchievementHandler::OneSmallStep(){
     }
 }
 //the follower achievement and the leader achievement (docentside)(studentside)
-//the follower achievement is given to the person which has the least points at the end of the day.
-//the leader achievement is given to the person which has the most points at the end of the day.
+//the follower achievement is given to the person that has the least amount of points at the end of the day.
+//the leader achievement is given to the person that has the most amount of points at the end of the day.
 void AchievementHandler::Follower(){
     QDateTime time = QDateTime::currentDateTime();
     message = "SELECT COUNT(accID) FROM `achievements` ORDER BY `achievements`.`time` DESC WHERE `timestamp` > " + time.toString();
@@ -475,8 +475,8 @@ void AchievementHandler::Follower(){
 }
 
 //the followed achievement and the lead achievement (docentside)(studentside)
-//the followed achievement is given to the person which has the least points.
-//the lead achievement is given to the person which has the most points.
+//the followed achievement is given to the person which has the least amount of points.
+//the lead achievement is given to the person that has the most amount of points.
 void AchievementHandler::Followed(){
     message = "SELECT d.accID, SUM(a.score) FROM `accounts` as d JOIN `achievements` as b ON b.accID = d.accID JOIN `achievement_list` as a ON b.achID = a.achID WHERE d.admin = 0 GROUP BY d.username ORDER BY 2 DESC LIMIT 1";
     query = sqlplayer->select(message);
@@ -494,7 +494,7 @@ void AchievementHandler::Followed(){
 }
 
 //the compressed achievement and decompressed achievement(studentside)
-//check if the submitted code is longer then 50 lines (decompressed) or smaller then
+//check if the submitted code is longer than 50 lines (decompressed) or smaller than
 //3 lines(compressed).
 void AchievementHandler::Compressed(QString Parent){
     QString code = Parent;
@@ -522,7 +522,7 @@ void AchievementHandler::Compressed(QString Parent){
 //All the helper functions of the achievement handler
 
 //is a function to make sure their will be only one entry for each accountID and achievementID.
-//if their is not such unique combination their is a new achievement inserted into the database.
+//if there is no such unique combination, a new achievement will be inserted into the database.
 bool AchievementHandler::InsertAchievement(int accountID, int achievementID ){
     achievetracker = achievementID;
     message = "SELECT EXISTS(SELECT * FROM `achievements` WHERE `achID` = " + QString::number(achievementID) + " AND `accID` = " + QString::number(accountID) + ")";
@@ -560,7 +560,7 @@ int AchievementHandler::AllNormals(){
     return (query.value(0).toInt());
 }
 
-// a function called when ever their is an new achievement entry in the database.
+// a function called whenever there is a new achievement entry in the database.
 void AchievementHandler::NewAchieve(){
     qDebug("New Achievement achieve:" + achievetracker);
     Followed();
@@ -576,7 +576,7 @@ void AchievementHandler::NewAchieve(){
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// the sumbit functions for both studennt and docent
+// the sumbit functions for both student and docent
 //Student
 void AchievementHandler::SubmitStudent(int assID, QString code){
     assignmentID = assID;

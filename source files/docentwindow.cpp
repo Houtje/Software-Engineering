@@ -1,8 +1,8 @@
 #include "docentwindow.h"
 
 
-//the main window for the docent all the possiblty to rated and exmine the students codes.
-//also button to compile their codes and make new assignment, alter assignments or delete assignments.
+//the main window for the teacher. All the assignments submitted can be examined and rated here.
+//it features buttons to compile the codes of the students and make new assignment, alter assignments or delete assignments.
 DocentWindow::DocentWindow(QWidget *parent) :
     QMainWindow(parent),
 	ui(new Ui::DocentWindow)
@@ -34,7 +34,7 @@ DocentWindow::~DocentWindow()
 	delete ui;
 }
 
-//opens the assignment window with all the possibility's to make a new assignment,alter an assignment or delete an assignment.
+//opens the assignment window with all the assignments in order to make a new assignment, alter an assignment or delete an assignment.
 void DocentWindow::on_opdrachtBeheerButton_clicked()
 {
 	DocentAssignmentsWindow* w = new DocentAssignmentsWindow();
@@ -75,7 +75,7 @@ void DocentWindow::on_compileButton_clicked()
 
 }
 
-//sumbit the score given to a student. An alter it in the database.
+//sumbit the score given to a student by altering it in the database.
 void DocentWindow::on_submitButton_clicked(){
 	bool layout = ui->checkboxLayout->isChecked();
 	bool werking = ui->checkboxWerking->isChecked();
@@ -104,8 +104,7 @@ void DocentWindow::on_submitButton_clicked(){
     ui->funnyButton->setDisabled(true);
 }
 
-//Select an sumbitted student assignment to see their codes
-//and see the assignment.
+//doubleclick a sumbitted student assignment to open the assignment.
 void DocentWindow::on_tableWidget_cellDoubleClicked(int row)
 {
 	ui->compileButton->setDisabled(false);
@@ -161,15 +160,15 @@ void DocentWindow::on_logOutButton_clicked()
 	this->close();
 }
 
-//keeping the possibility to go back from the assignment window.
+//function for logindialog to see if it has to keep going or shutdown.
 bool DocentWindow::keepGoing() {
 	bool tempLogin = goLogin;
 	goLogin = false;
 	return tempLogin;
 }
 
-//the possibility to give an student the "you made a funny code" reward
-//and giving them prankster achievement.
+//the possibility to give a student the "you made a funny code" reward
+//and giving them the prankster achievement.
 void DocentWindow::on_funnyButton_clicked()
 {
     message = "SELECT `accID` FROM `accounts` WHERE `username` = '" + opdrachtMaker + "'";

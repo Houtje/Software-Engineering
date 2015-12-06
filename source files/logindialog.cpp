@@ -1,8 +1,7 @@
 #include "logindialog.h"
 
-//the login screen. This is the start up screen where we can make a new user(student).
-//we can login to a student side account and a docent side account depending on the
-//permission of the account which is login in.
+//The login screen. This is the start up screen where we can log in or create a new account for a student.
+//we can login to a student side account and a docent side account depending on the login credentials.
 LogInDialog::LogInDialog(QWidget *parent) :
     QDialog(parent),
 	ui(new Ui::LogInDialog)
@@ -18,13 +17,13 @@ LogInDialog::~LogInDialog()
 	delete ui;
 }
 
-//the button that makes the login happen deping on what is entered in the name and password field.
-//Giving an docentwindow when login in with a admin = 1 account, Giving an studentwindow when login in
-//with a admin = 0 account  and giving an error when the account is not founded with that specifiek
-//password.
+//The button that makes the login happen depending on what is entered in the name and password field.
+//It opens de docentwindow when a user logs in with a teachers account and opens the student window
+//when the user logs in with a student account.
 void LogInDialog::on_logInButton_clicked()
 {
 	ui->NameTextBox->setFocus();
+	ui->ErrorLabel->setText("");
 	QString name = ui->NameTextBox->text();
 	QString pass = ui->PassTextBox->text();
 

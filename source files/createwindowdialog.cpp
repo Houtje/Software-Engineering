@@ -1,6 +1,6 @@
 #include "createwindowdialog.h"
 
-//we are clicked the alter or the create button in docentassignmentswindow
+//clicked the edit or the create button in docentassignmentswindow
 //we are altering an assignment(assignment > 0) or creating a new assignment(assignment = 0)
 CreateWindowDialog::CreateWindowDialog(int assignment, QWidget *parent) :
     QDialog(parent),
